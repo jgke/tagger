@@ -1,7 +1,14 @@
 language: java
 jdk:
-  - oraclejdk8
+- oraclejdk8
 services:
-    - postgresql
+- postgresql
 env:
-    - JDBC_DATABASE_URL=jdbc:postgresql:postgres
+- JDBC_DATABASE_URL=jdbc:postgresql:postgres
+deploy:
+  provider: heroku
+  api_key:
+    secure: DLmkedwn2SKB2+vd8UWb16vcl323m/78rxl9UJe2ai/303fL7LFctTlsm90+/fBgeWgn5UxpzFyxpr9fx2dXCRPFnmUfFJzZ/OYBaITWENmhM6o9Kzen6pmQH/VeBh+XEDcFSRRwczgokD4jf4HB5/r5KI3shmw7rkTEjMAMIPMSZCaxlJ4siPBeKJPjWwbo+D+xL1ryf3tldrUHFheA5D7ghNOrEyUa8zdGomlsGBDeb3geadWGqhBk45FFw9A9Ii82+yA+CGnlbXEzQJ/7MDkkJ6ndiaRL98WutXM7q4MZ40r7uQdR5nLZ6jhrO6KNQ0BlhrlNFVFTV8x46PyEBJMVPfRN+T7w6Sh/KFhNG+B6BJMKwZuH4bSbphyPT2ciEhsfs95ojl5NkUpb+iUzMBBpW/glq8xhAA2Kv+UcOWO41rcAX131s2EfjYmAmmcazgGBjDQ0mAoOCc1LCpFFEHRVBiK+Qnqu5EDQr7n3wVnoL4ZVddHvMA3awKTXur2yPZI4h5GtLfQoMRicKKIcv2AMqAccE0S7PySPZA/TVe6rp6ipM/MhD4L4hjjLQHZZk1Arnh5tyaKlJWhxSpfUPgJ890ACBmfrg96mMnD67xAxuJ7YZWrphDi7bIyC5iW57AY060ybXzT6mTukNtl7xPxXna7T6K2b91WuTel01Us=
+  app: powerful-fortress-97395
+  on:
+    repo: jgke/tagger
