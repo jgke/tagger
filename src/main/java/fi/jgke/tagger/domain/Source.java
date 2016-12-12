@@ -22,10 +22,6 @@ public class Source extends AbstractPersistable<Long> {
     private String url;
 
     @OneToOne
-    @JoinColumn(name = "submitter")
-    private User submitter;
-
-    @OneToOne
     @JoinColumn(name = "sourcetype")
     private Type sourcetype;
 
@@ -43,14 +39,6 @@ public class Source extends AbstractPersistable<Long> {
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    public User getSubmitter() {
-        return submitter;
-    }
-
-    public void setSubmitter(User submitter) {
-        this.submitter = submitter;
     }
 
     public Type getSourcetype() {
