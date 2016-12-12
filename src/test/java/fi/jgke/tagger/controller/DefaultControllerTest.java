@@ -1,7 +1,12 @@
 package fi.jgke.tagger.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fi.jgke.tagger.domain.Type;
+import fi.jgke.tagger.domain.User;
+import fi.jgke.tagger.repository.TypeRepository;
+import fi.jgke.tagger.repository.UserRepository;
 import java.util.UUID;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,13 +30,25 @@ public class DefaultControllerTest {
     @Autowired
     private WebApplicationContext webAppContext;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private TypeRepository typeRepository;
+
     private MockMvc mockMvc;
     private ObjectMapper mapper;
-
+    private User user;
+    
     @Before
     public void setUp() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webAppContext).build();
         this.mapper = new ObjectMapper();
+    }
+    
+    @After
+    public void tearDown() {
+        this.userRepository.delete(this.user);
     }
 
     @Test
@@ -50,9 +67,14 @@ public class DefaultControllerTest {
     public void responseContainsAddedItem() throws Exception {
         String title = UUID.randomUUID().toString();
         String url = UUID.randomUUID().toString();
+        Type type = this.typeRepository.findByValue("html");
+        User user = this.userRepository.findAll().stream().findAny().get();
 
-        String sourcestring = "{\"title\": \"" + title + "\", \"url\": \"" + url + "\"}";
+        String sourcestring = "{\"title\": \"" + title + "\", \"url\": \"" + url + "\", "
+                + "\"sourcetype\": " +  type.getId() + ", \"submitter\": \"" + user.getId() + "\"}";
 
+        System.out.println("\n\n\nSourcestring: " + sourcestring + "\n\n\n");
+        
         MvcResult postResponse = mockMvc.perform(
                 post("/api/v1/sources")
                         .contentType(MediaType.APPLICATION_JSON)

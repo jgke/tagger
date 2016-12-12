@@ -1,27 +1,8 @@
 databaseChangeLog:
-  - changeSet:
-      id: 1
-      author: jgke
-      changes:
-        - createSequence:
-            sequenceName: hibernate_sequence
-        - createTable:
-            tableName: source
-            columns:
-              - column:
-                  name: id
-                  type: serial
-                  autoIncrement: true
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
-                  name: title
-                  type: varchar(100))
-                  constraints:
-                    nullable: false
-              - column:
-                  name: url
-                  type: varchar(2048)
-                  constraints:
-                    nullable: false
+    - changeSet:
+        id: 1
+        author: liquibase-docs
+        changes:
+        - sqlFile:
+            path: v1.sql
+            relativeToChangelogFile: true
