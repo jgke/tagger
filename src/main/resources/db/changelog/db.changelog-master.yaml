@@ -1,8 +1,15 @@
 databaseChangeLog:
     - changeSet:
         id: 1
-        author: liquibase-docs
+        author: jgke
         changes:
         - sqlFile:
             path: v1.sql
+            relativeToChangelogFile: true
+    - changeSet:
+        id: 2
+        author: jgke
+        changes:
+        - sqlFile:
+            path: v2.sql
             relativeToChangelogFile: true

@@ -1,10 +1,13 @@
 package fi.jgke.tagger.domain;
 
+import java.util.List;
+
 /**
  *
  * @author jgke
  */
 public class SourceParameter {
+
     private String title;
     private String url;
     private Long sourcetype;
@@ -37,6 +40,5 @@ public class SourceParameter {
     public String toString() {
         return "SourceParameter{" + "title=" + title + ", url=" + url + ", sourcetype=" + sourcetype + '}';
     }
-    
-    
+
 }
