@@ -8,8 +8,27 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>tagger</name>
+    <name>Tagger</name>
+    <url>https://tagger.jgke.fi</url>
     <description>URL tagger service</description>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/jgke/tagger/issues</url>
+    </issueManagement>
+
+    <developers>
+        <developer>
+            <id>jgke</id>
+            <name>Jaakko Hannikainen</name>
+            <email>jgke@jgke.fi</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git@github.com:jgke/tagger.git/</connection>
+        <url>https://github.com/jgke/tagger</url>
+    </scm>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
