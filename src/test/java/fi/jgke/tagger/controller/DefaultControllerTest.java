@@ -96,7 +96,6 @@ public class DefaultControllerTest {
         sourceParameter.sourcetype = "types/" + type.getId();
 
         String sourcestring = mapper.writeValueAsString(sourceParameter);
-        System.out.println("Sourcestring: " + sourcestring);
 
         MvcResult postResponse = mockMvc.perform(
                 post("/api/v1/sources")

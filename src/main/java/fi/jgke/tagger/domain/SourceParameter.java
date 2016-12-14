@@ -1,7 +1,5 @@
 package fi.jgke.tagger.domain;
 
-import java.util.List;
-
 /**
  *
  * @author jgke
@@ -35,10 +33,4 @@ public class SourceParameter {
     public void setSourcetype(Long sourcetype) {
         this.sourcetype = sourcetype;
     }
-
-    @Override
-    public String toString() {
-        return "SourceParameter{" + "title=" + title + ", url=" + url + ", sourcetype=" + sourcetype + '}';
-    }
-
 }
