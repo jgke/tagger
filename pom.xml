@@ -9,7 +9,7 @@
     <packaging>jar</packaging>
 
     <name>Tagger</name>
-    <url>https://tagger.jgke.fi</url>
+    <url>http://tagger.jgke.fi</url>
     <description>URL tagger service</description>
 
     <issueManagement>
