@@ -8,13 +8,13 @@
 
         <h1 th:text="${title}"></h1>
         <div th:switch="${type}">
-            <div th:case="'image'">Image</div>
+            <div th:case="'image'"><img th:src="${url}" th:alt="${title}"/></div>
             <div th:case="'html'">Html</div>
             <div th:case="'video'">Video</div>
             <div th:case="'sound'">Sound</div>
         </div>
         <a th:href="${url}">Link</a>
-
+        <br/>
         Tags:
         <ul>
             <li th:each="tag: ${tags}"><span th:text="${tag.value}">tag</span></li>

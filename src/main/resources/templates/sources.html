@@ -10,8 +10,7 @@
 
         <ul>
             <li th:each="source: ${sources}">
-                <span th:text="${source.title}"></span>
-                <span th:text="${source.url}"></span>
+                <a th:href="@{/sources/{id}(id=${source.id})}" th:text="${source.title}"></a>
             </li>
         </ul>
 
