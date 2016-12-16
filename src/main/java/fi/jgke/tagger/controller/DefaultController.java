@@ -36,7 +36,7 @@ public class DefaultController {
         return "index";
     }
 
-    @RequestMapping("/{id}")
+    @RequestMapping("/sources/{id}")
     public String getSource(Model model, @PathVariable Long id) {
         Source source = sourceRepository.findOne(id);
         model.addAttribute("type", source.getSourcetype().getValue());
