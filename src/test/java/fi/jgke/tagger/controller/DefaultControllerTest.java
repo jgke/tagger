@@ -76,9 +76,15 @@ public class DefaultControllerTest {
     }
 
     @Test
-    public void statusOk() throws Exception {
+    public void indexRedirects() throws Exception {
         mockMvc.perform(get("/"))
-                .andExpect(status().isOk());
+                .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    public void statusOk() throws Exception {
+        mockMvc.perform(get("/sources"))
+                .andExpect(status().is2xxSuccessful());
     }
 
     @Test

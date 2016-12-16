@@ -8,10 +8,10 @@
 
         <h1 th:text="${title}"></h1>
         <div th:switch="${type}">
-            <p th:case="'image'">Image</p>
-            <p th:case="'html'">Html</p>
-            <p th:case="'video'">Video</p>
-            <p th:case="'sound'">Sound</p>
+            <div th:case="'image'">Image</div>
+            <div th:case="'html'">Html</div>
+            <div th:case="'video'">Video</div>
+            <div th:case="'sound'">Sound</div>
         </div>
         <a th:href="${url}">Link</a>
 
