@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <title th:text="${title}"></title>
+    </head>
+    <body>
+
+        <h1 th:text="${title}"></h1>
+        <div th:switch="${type}">
+            <p th:case="'image'">Image</p>
+            <p th:case="'html'">Html</p>
+            <p th:case="'video'">Video</p>
+            <p th:case="'sound'">Sound</p>
+        </div>
+        <a th:href="${url}">Link</a>
+
+        Tags:
+        <ul>
+            <li th:each="tag: ${tags}"><span th:text="${tag.value}">tag</span></li>
+        </ul>
+    </body>
+</html>
