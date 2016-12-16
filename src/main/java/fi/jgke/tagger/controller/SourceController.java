@@ -19,6 +19,7 @@ import fi.jgke.tagger.repository.SourceRepository;
 import fi.jgke.tagger.domain.Source;
 import fi.jgke.tagger.domain.Tag;
 import fi.jgke.tagger.domain.Type;
+import fi.jgke.tagger.exception.InvalidSourceUrlException;
 import fi.jgke.tagger.exception.TagAlreadyExistsException;
 import fi.jgke.tagger.repository.TagRepository;
 import fi.jgke.tagger.repository.TypeRepository;
@@ -31,6 +32,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.apache.commons.validator.routines.UrlValidator;
 
 @Controller
 @RequestMapping("/sources")
@@ -66,6 +68,11 @@ public class SourceController {
     @RequestMapping(method = RequestMethod.POST)
     public String addSource(Model model, @RequestParam String title, @RequestParam String url,
             @RequestParam Long sourcetype) {
+
+        if (!isValidUrl(url)) {
+            throw new InvalidSourceUrlException();
+        }
+
         Type type = typeRepository.findOne(sourcetype);
         Source source = new Source();
         source.setTitle(title);
@@ -80,19 +87,25 @@ public class SourceController {
     public String addTag(@PathVariable Long id, @RequestParam String tagname) {
         Source source = sourceRepository.findOne(id);
         Tag tag = tagRepository.findByValue(tagname);
-        if(tag == null) {
+        if (tag == null) {
             tag = new Tag();
             tag.setValue(tagname);
             tag = tagRepository.save(tag);
         }
         List<Tag> tags = source.getTags();
-        if(tags.contains(tag)) {
+        if (tags.contains(tag)) {
             throw new TagAlreadyExistsException();
         }
         tags.add(tag);
         source.setTags(tags);
         sourceRepository.save(source);
         return "redirect:/sources/" + source.getId();
+    }
+
+    private boolean isValidUrl(String url) {
+        String[] schemes = {"http", "https"};
+        UrlValidator urlValidator = new UrlValidator(schemes);
+        return urlValidator.isValid(url);
     }
 
 }
