@@ -19,5 +19,9 @@
         <ul>
             <li th:each="tag: ${tags}"><span th:text="${tag.value}">tag</span></li>
         </ul>
+        <form th:action="@{/sources/{id}/tags(id=${id})}" th:method="POST">
+            <p>Tag name: <input type="text" name="tagname"/></p>
+            <input type="submit" value="Add!"/>
+        </form>
     </body>
 </html>

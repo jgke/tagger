@@ -17,8 +17,13 @@ package fi.jgke.tagger.controller;
 
 import fi.jgke.tagger.repository.SourceRepository;
 import fi.jgke.tagger.domain.Source;
+import fi.jgke.tagger.domain.Tag;
 import fi.jgke.tagger.domain.Type;
+import fi.jgke.tagger.exception.TagAlreadyExistsException;
+import fi.jgke.tagger.repository.TagRepository;
 import fi.jgke.tagger.repository.TypeRepository;
+import java.util.List;
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,6 +42,9 @@ public class SourceController {
     @Autowired
     TypeRepository typeRepository;
 
+    @Autowired
+    TagRepository tagRepository;
+
     @RequestMapping
     public String handleDefault(Model model) {
         model.addAttribute("sources", sourceRepository.findAll());
@@ -47,6 +55,7 @@ public class SourceController {
     @RequestMapping("/{id}")
     public String getSource(Model model, @PathVariable Long id) {
         Source source = sourceRepository.findOne(id);
+        model.addAttribute("id", source.getId());
         model.addAttribute("type", source.getSourcetype().getValue());
         model.addAttribute("title", source.getTitle());
         model.addAttribute("tags", source.getTags());
@@ -63,6 +72,26 @@ public class SourceController {
         source.setUrl(url);
         source.setSourcetype(type);
         source = sourceRepository.save(source);
+        return "redirect:/sources/" + source.getId();
+    }
+
+    @RequestMapping(value = "/{id}/tags", method = RequestMethod.POST)
+    @Transactional
+    public String addTag(@PathVariable Long id, @RequestParam String tagname) {
+        Source source = sourceRepository.findOne(id);
+        Tag tag = tagRepository.findByValue(tagname);
+        if(tag == null) {
+            tag = new Tag();
+            tag.setValue(tagname);
+            tag = tagRepository.save(tag);
+        }
+        List<Tag> tags = source.getTags();
+        if(tags.contains(tag)) {
+            throw new TagAlreadyExistsException();
+        }
+        tags.add(tag);
+        source.setTags(tags);
+        sourceRepository.save(source);
         return "redirect:/sources/" + source.getId();
     }
 
