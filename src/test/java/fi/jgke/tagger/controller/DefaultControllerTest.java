@@ -94,12 +94,16 @@ public class DefaultControllerTest {
     }
 
     private Long addTag(String value) {
-        Tag tag = new Tag();
+        Tag tag = tagRepository.findByValue(value);
+        if(tag != null)
+            return tag.getId();
+        tag = new Tag();
         tag.setValue(value);
         return tagRepository.save(tag).getId();
     }
 
     @Test
+    @Transactional
     public void responseContainsAddedItem() throws Exception {
         class SourceParameter {
 
