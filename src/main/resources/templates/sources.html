@@ -24,6 +24,13 @@
             <input type="submit" value="Add!"/>
         </form>
 
+        <br />
+        Search:
+
+        <form th:action="@{/search}" th:method="POST">
+            <p>Tag <input type="text" name="tagstring"/></p>
+            <input type="submit" value="Search!"/>
+        </form>
 
     </body>
 </html>

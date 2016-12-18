@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Tagger</title>
+    </head>
+    <body>
+
+        <h1 th:text="${tag}"></h1>
+
+        <ul>
+            <li th:each="source: ${sources}">
+                <a th:href="@{/sources/{id}(id=${source.id})}" th:text="${source.title}"></a>
+            </li>
+        </ul>
+
+    </body>
+</html>
