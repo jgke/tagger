@@ -15,8 +15,12 @@
  */
 package fi.jgke.tagger.controller;
 
+import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSelect;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import javax.transaction.Transactional;
 import org.junit.Assert;
 import org.junit.Test;
@@ -34,10 +38,31 @@ public class SourceControllerTest {
     private Integer port;
 
     @Test
-    public void homePage() throws Exception {
-        final WebClient webClient = new WebClient();
-        final HtmlPage page = webClient.getPage("http://localhost:" + port + "/sources");
-        Assert.assertEquals("Tagger", page.getTitleText());
+    public void indexWorks() throws Exception {
+        try (WebClient webClient = new WebClient()) {
+            HtmlPage page = webClient.getPage("http://localhost:" + port);
+            Assert.assertEquals("Tagger", page.getTitleText());
+        }
+    }
+
+    @Test
+    public void canAddASource() throws Exception {
+        try (WebClient webClient = new WebClient()) {
+            String title = "Test title";
+            String url = "http://example.com";
+            HtmlPage page = webClient.getPage("http://localhost:" + port);
+            HtmlForm form = page.getFormByName("addform");
+            form.getInputByName("title").setValueAttribute(title);
+            form.getInputByName("url").setValueAttribute(url);
+            HtmlSelect sourcetypeSelect = form.getSelectByName("sourcetype");
+            sourcetypeSelect.setSelectedAttribute(sourcetypeSelect.getOptions()
+                    .stream()
+                    .filter((t) -> t.asText().equals("html"))
+                    .findAny().get(), true);
+            HtmlPage page2 = form.getInputByName("addbutton").click();
+            Assert.assertTrue(page2.asText().contains(title));
+            Assert.assertTrue(page2.asXml().contains(url));
+        }
     }
 
 }

@@ -14,14 +14,14 @@
             </li>
         </ul>
 
-        <form th:action="@{/sources}" th:method="POST">
+        <form th:action="@{/sources}" th:method="POST" name="addform">
             <p>Title: <input type="text" name="title"/></p>
             <p>URL: <input type="text" name="url" /></p>
             <select name="sourcetype">
                 <option th:each="type: ${types}" th:value="${type.id}"
                         th:text="${type.value}" >Options</option>
             </select><br/>
-            <input type="submit" value="Add!"/>
+            <input type="submit" value="Add!" name="addbutton"/>
         </form>
 
         <br />
