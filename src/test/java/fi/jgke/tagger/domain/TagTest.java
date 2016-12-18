@@ -29,4 +29,11 @@ public class TagTest {
         assertEquals(value, instance.getValue());
     }
 
+    @Test
+    public void testConstructorWithValue() {
+        String value = UUID.randomUUID().toString();
+        Tag instance = new Tag(value);
+        assertEquals(value, instance.getValue());
+    }
+
 }

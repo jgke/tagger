@@ -16,6 +16,7 @@
 package fi.jgke.tagger.domain;
 
 import fi.jgke.tagger.exception.TagAlreadyExistsException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -50,6 +51,10 @@ public class Source extends AbstractPersistable<Long> {
             joinColumns = @JoinColumn(name = "source", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "tag", referencedColumnName = "id"))
     List<Tag> tags;
+
+    public Source() {
+        this.tags = new ArrayList<>();
+    }
 
     public String getTitle() {
         return title;

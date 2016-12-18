@@ -15,6 +15,7 @@
  */
 package fi.jgke.tagger.domain;
 
+import fi.jgke.tagger.exception.TagAlreadyExistsException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -68,11 +69,28 @@ public class SourceTest {
         for (int i = 0; i < 3; i++) {
             Tag tag = new Tag();
             tag.setValue(UUID.randomUUID().toString());
-            tags.add(tag);
+            if (!tags.contains(tag)) {
+                tags.add(tag);
+            }
         }
         Source instance = new Source();
         instance.setTags(tags);
         assertEquals(tags, instance.getTags());
     }
 
+    @Test
+    public void testAddTag() {
+        Source instance = new Source();
+        Tag tag = new Tag("foo");
+        instance.addTag(tag);
+        assertTrue(instance.getTags().contains(tag));
+    }
+
+    @Test(expected=TagAlreadyExistsException.class)
+    public void testAddDuplicateTagThrows() {
+        Source instance = new Source();
+        Tag tag = new Tag("foo");
+        instance.addTag(tag);
+        instance.addTag(tag);
+    }
 }
