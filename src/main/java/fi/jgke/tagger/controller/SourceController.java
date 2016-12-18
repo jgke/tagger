@@ -86,18 +86,8 @@ public class SourceController {
     @Transactional
     public String addTag(@PathVariable Long id, @RequestParam String tagname) {
         Source source = sourceRepository.findOne(id);
-        Tag tag = tagRepository.findByValue(tagname);
-        if (tag == null) {
-            tag = new Tag();
-            tag.setValue(tagname);
-            tag = tagRepository.save(tag);
-        }
-        List<Tag> tags = source.getTags();
-        if (tags.contains(tag)) {
-            throw new TagAlreadyExistsException();
-        }
-        tags.add(tag);
-        source.setTags(tags);
+        Tag tag = tagRepository.findByValueOrCreateNew(tagname);
+        source.addTag(tag);
         sourceRepository.save(source);
         return "redirect:/sources/" + source.getId();
     }

@@ -46,6 +46,7 @@ public class SourceControllerTest {
     }
 
     @Test
+    @Transactional
     public void canAddASource() throws Exception {
         try (WebClient webClient = new WebClient()) {
             String title = "Test title";

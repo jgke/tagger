@@ -15,6 +15,7 @@
  */
 package fi.jgke.tagger.domain;
 
+import fi.jgke.tagger.exception.TagAlreadyExistsException;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -80,5 +81,14 @@ public class Source extends AbstractPersistable<Long> {
 
     public void setTags(List<Tag> tags) {
         this.tags = tags;
+    }
+
+    public void addTag(Tag tag) throws TagAlreadyExistsException {
+        if (this.tags.contains(tag)) {
+            throw new TagAlreadyExistsException();
+        }
+        List<Tag> tags = this.getTags();
+        tags.add(tag);
+        this.setTags(tags);
     }
 }

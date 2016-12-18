@@ -21,4 +21,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface TagRepository extends JpaRepository<Tag, Long> {
 
     Tag findByValue(String value);
+
+    default Tag findByValueOrCreateNew(String value) {
+        Tag tag = this.findByValue(value);
+        if (tag == null) {
+            tag = this.save(new Tag(value));
+        }
+        return tag;
+    }
 }

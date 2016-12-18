@@ -41,6 +41,13 @@ public class Tag extends AbstractPersistable<Long> {
     @ManyToMany(mappedBy = "tags", cascade = CascadeType.ALL)
     List<Source> sources;
 
+    public Tag() {
+    }
+
+    public Tag(String value) {
+        this.setValue(value);
+    }
+
     public String getValue() {
         return value;
     }
