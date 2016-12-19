@@ -15,6 +15,8 @@
  */
 package fi.jgke.tagger.domain;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -27,6 +29,15 @@ public class TagTest {
         Tag instance = new Tag();
         instance.setValue(value);
         assertEquals(value, instance.getValue());
+    }
+
+    @Test
+    public void testSetGetSources() {
+        Tag instance = new Tag();
+        List<Source> sources = new ArrayList<>();
+        sources.add(new Source());
+        instance.setSources(sources);
+        assertEquals(sources, instance.getSources());
     }
 
     @Test
