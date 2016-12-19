@@ -19,6 +19,8 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSelect;
+import java.io.IOException;
+import java.util.UUID;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,28 +43,56 @@ public class SourceControllerTest {
         }
     }
 
+    private HtmlPage addSource(HtmlPage page, String title, String url) throws IOException {
+        HtmlForm form = page.getFormByName("addform");
+        form.getInputByName("title").setValueAttribute(title);
+        form.getInputByName("url").setValueAttribute(url);
+        HtmlSelect sourcetypeSelect = form.getSelectByName("sourcetype");
+        sourcetypeSelect.setSelectedAttribute(sourcetypeSelect.getOptions()
+                .stream()
+                .filter((t) -> t.asText().equals("html"))
+                .findAny().get(), true);
+
+        return form.getInputByName("addbutton").click();
+    }
+
     @Test
     public void canAddASource() throws Exception {
         try (WebClient webClient = new WebClient()) {
-            String title = "Test title";
+            String title = UUID.randomUUID().toString();
             String url = "http://example.com";
+
             HtmlPage page = webClient.getPage("http://localhost:" + port);
+            page = addSource(page, title, url);
 
-            HtmlForm form = page.getFormByName("addform");
-            form.getInputByName("title").setValueAttribute(title);
-            form.getInputByName("url").setValueAttribute(url);
-            HtmlSelect sourcetypeSelect = form.getSelectByName("sourcetype");
-            sourcetypeSelect.setSelectedAttribute(sourcetypeSelect.getOptions()
-                    .stream()
-                    .filter((t) -> t.asText().equals("html"))
-                    .findAny().get(), true);
+            Assert.assertTrue(page.asText().contains(title));
+            Assert.assertTrue(page.asXml().contains(url));
 
-            HtmlPage page2 = form.getInputByName("addbutton").click();
+            /* If the test fails before this, the source is left in the database... */
+            page.getFormByName("deleteform").getInputByName("deletebutton").click();
+        }
+    }
 
-            Assert.assertTrue(page2.asText().contains(title));
-            Assert.assertTrue(page2.asXml().contains(url));
+    private HtmlPage addTag(HtmlPage page, String tag) throws IOException {
+        HtmlForm form = page.getFormByName("tagform");
+        form.getInputByName("tagname").setValueAttribute(tag);
+        return form.getInputByName("addbutton").click();
+    }
 
-            page2.getFormByName("deleteform").getInputByName("deletebutton").click();
+    @Test
+    public void canAddTagsToASource() throws Exception {
+        try (WebClient webClient = new WebClient()) {
+            String title = UUID.randomUUID().toString();
+            String url = "http://example.com";
+            String tag = UUID.randomUUID().toString();
+
+            HtmlPage page = webClient.getPage("http://localhost:" + port);
+            page = addSource(page, title, url);
+            page = addTag(page, tag);
+
+            Assert.assertTrue(page.asText().contains(tag));
+
+            page.getFormByName("deleteform").getInputByName("deletebutton").click();
         }
     }
 
