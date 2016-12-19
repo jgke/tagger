@@ -85,6 +85,12 @@ public class SourceController {
         return "redirect:/sources/" + source.getId();
     }
 
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public String deleteTag(@PathVariable Long id) {
+        sourceRepository.delete(id);
+        return "redirect:/sources";
+    }
+
     private boolean isValidUrl(String url) {
         String[] schemes = {"http", "https"};
         UrlValidator urlValidator = new UrlValidator(schemes);
