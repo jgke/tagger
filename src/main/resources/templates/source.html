@@ -2,24 +2,25 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8" />
-        <title th:text="${title}"></title>
+        <title th:text="${source.title}"></title>
     </head>
     <body>
 
-        <h1 th:text="${title}"></h1>
+        <h1 th:text="${source.title}"></h1>
         <div th:switch="${type}">
-            <div th:case="'image'"><img th:src="${url}" th:alt="${title}"/></div>
+            <!-- does inlining stuff here cause security vulnerabilities (eg. XSS)? -->
+            <div th:case="'image'"><img th:src="${source.url}" th:alt="${source.title}"/></div>
             <div th:case="'html'">Html</div>
             <div th:case="'video'">Video</div>
             <div th:case="'sound'">Sound</div>
         </div>
-        <a th:href="${url}">Link</a>
+        <a th:href="${source.url}">Link</a>
         <br/>
         Tags:
         <ul>
-            <li th:each="tag: ${tags}"><span th:text="${tag.value}">tag</span></li>
+            <li th:each="tag: ${source.tags}"><span th:text="${tag.value}">tag</span></li>
         </ul>
-        <form th:action="@{/sources/{id}/tags(id=${id})}" th:method="POST">
+        <form th:action="@{/sources/{source.id}/tags(id=${source.id})}" th:method="POST">
             <p>Tag name: <input type="text" name="tagname"/></p>
             <input type="submit" value="Add!"/>
         </form>

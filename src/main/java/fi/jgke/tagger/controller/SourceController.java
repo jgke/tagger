@@ -57,16 +57,13 @@ public class SourceController {
     @RequestMapping("/{id}")
     public String getSource(Model model, @PathVariable Long id) {
         Source source = sourceRepository.findOne(id);
-        model.addAttribute("id", source.getId());
+        model.addAttribute("source", source);
         model.addAttribute("type", source.getSourcetype().getValue());
-        model.addAttribute("title", source.getTitle());
-        model.addAttribute("tags", source.getTags());
-        model.addAttribute("url", source.getUrl());
         return "source";
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String addSource(Model model, @RequestParam String title, @RequestParam String url,
+    public String addSource(@RequestParam String title, @RequestParam String url,
             @RequestParam Long sourcetype) {
 
         if (!isValidUrl(url)) {

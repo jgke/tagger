@@ -38,10 +38,7 @@ public class TagSearchController {
 
     @RequestMapping
     public String getSource(Model model, @RequestParam String tagstring) {
-        Tag tag = tagRepository.findByValue(tagstring);
-        if (tag == null) {
-            throw new TagNotFoundException();
-        }
+        Tag tag = tagRepository.findByValueOrThrow(tagstring);
         model.addAttribute("tag", tag.getValue());
         model.addAttribute("sources", sourceRepository.findAll()
                 .stream()
