@@ -5,6 +5,7 @@
         <title th:text="${source.title}"></title>
     </head>
     <body>
+        <header th:replace="fragments/header :: header"></header>
 
         <h1 th:text="${source.title}"></h1>
         <div th:switch="${type}">
