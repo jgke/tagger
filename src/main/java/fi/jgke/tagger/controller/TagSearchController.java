@@ -40,10 +40,7 @@ public class TagSearchController {
     public String getSource(Model model, @RequestParam String tagstring) {
         Tag tag = tagRepository.findByValueOrThrow(tagstring);
         model.addAttribute("tag", tag.getValue());
-        model.addAttribute("sources", sourceRepository.findAll()
-                .stream()
-                .filter((t) -> t.getTags().contains(tag))
-                .collect(Collectors.toList()));
+        model.addAttribute("sources", tag.getSources());
         return "tagsearch";
     }
 

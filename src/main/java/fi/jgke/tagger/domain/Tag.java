@@ -54,6 +54,14 @@ public class Tag extends AbstractPersistable<Long> {
         this.value = value;
     }
 
+    public List<Source> getSources() {
+        return sources;
+    }
+
+    public void setSources(List<Source> sources) {
+        this.sources = sources;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
