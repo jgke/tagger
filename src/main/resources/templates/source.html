@@ -11,7 +11,7 @@
             <!-- does inlining stuff here cause security vulnerabilities (eg. XSS)? -->
             <div th:case="'image'"><img th:src="${source.url}" th:alt="${source.title}"/></div>
             <div th:case="'html'">Html</div>
-            <div th:case="'video'">Video</div>
+            <div th:case="'video'"><video th:src="${source.url}" autoplay="autoplay" /></div>
             <div th:case="'sound'">Sound</div>
         </div>
         <a th:href="${source.url}">Link</a>
