@@ -20,3 +20,10 @@ databaseChangeLog:
         - sqlFile:
             path: v3.sql
             relativeToChangelogFile: true
+    - changeSet:
+        id: 4
+        author: jgke
+        changes:
+        - sqlFile:
+            path: v4.sql
+            relativeToChangelogFile: true
