@@ -15,13 +15,10 @@
  */
 package fi.jgke.tagger.controller;
 
-import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSelect;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import javax.transaction.Transactional;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,7 +28,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Transactional
 public class SourceControllerTest {
 
     @LocalServerPort
@@ -46,7 +42,6 @@ public class SourceControllerTest {
     }
 
     @Test
-    @Transactional
     public void canAddASource() throws Exception {
         try (WebClient webClient = new WebClient()) {
             String title = "Test title";

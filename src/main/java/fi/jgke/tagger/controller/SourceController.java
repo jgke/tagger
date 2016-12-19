@@ -20,11 +20,8 @@ import fi.jgke.tagger.domain.Source;
 import fi.jgke.tagger.domain.Tag;
 import fi.jgke.tagger.domain.Type;
 import fi.jgke.tagger.exception.InvalidSourceUrlException;
-import fi.jgke.tagger.exception.TagAlreadyExistsException;
 import fi.jgke.tagger.repository.TagRepository;
 import fi.jgke.tagger.repository.TypeRepository;
-import java.util.List;
-import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -80,7 +77,6 @@ public class SourceController {
     }
 
     @RequestMapping(value = "/{id}/tags", method = RequestMethod.POST)
-    @Transactional
     public String addTag(@PathVariable Long id, @RequestParam String tagname) {
         Source source = sourceRepository.findOne(id);
         Tag tag = tagRepository.findByValueOrCreateNew(tagname);
