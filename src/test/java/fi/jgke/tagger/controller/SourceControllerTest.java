@@ -47,6 +47,7 @@ public class SourceControllerTest {
             String title = "Test title";
             String url = "http://example.com";
             HtmlPage page = webClient.getPage("http://localhost:" + port);
+
             HtmlForm form = page.getFormByName("addform");
             form.getInputByName("title").setValueAttribute(title);
             form.getInputByName("url").setValueAttribute(url);
@@ -55,9 +56,13 @@ public class SourceControllerTest {
                     .stream()
                     .filter((t) -> t.asText().equals("html"))
                     .findAny().get(), true);
+
             HtmlPage page2 = form.getInputByName("addbutton").click();
+
             Assert.assertTrue(page2.asText().contains(title));
             Assert.assertTrue(page2.asXml().contains(url));
+
+            page2.getFormByName("deleteform").getInputByName("deletebutton").click();
         }
     }
 

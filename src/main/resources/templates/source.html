@@ -24,8 +24,8 @@
             <p>Tag name: <input type="text" name="tagname"/></p>
             <input type="submit" value="Add!"/>
         </form>
-        <form th:action="@{/sources/{id}(id=${source.id})}" th:method="DELETE">
-            <input type="submit" value="Delete"/>
+        <form th:action="@{/sources/{id}(id=${source.id})}" name="deleteform" th:method="DELETE">
+            <input type="submit" name="deletebutton" value="Delete"/>
         </form>
     </body>
 </html>
