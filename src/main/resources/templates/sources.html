@@ -28,9 +28,9 @@
         <br />
         Search:
 
-        <form th:action="@{/search}" th:method="POST">
+        <form th:action="@{/search}" th:method="POST" name="tagsearchform">
             <p>Tag <input type="text" name="tagstring"/></p>
-            <input type="submit" value="Search!"/>
+            <input type="submit" value="Search!" name="searchbutton"/>
         </form>
 
     </body>

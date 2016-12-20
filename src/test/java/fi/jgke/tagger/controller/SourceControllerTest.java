@@ -96,4 +96,28 @@ public class SourceControllerTest {
         }
     }
 
+    private HtmlPage searchTag(HtmlPage page, String tag) throws IOException {
+        HtmlForm form = page.getFormByName("tagsearchform");
+        form.getInputByName("tagstring").setValueAttribute(tag);
+        return form.getInputByName("searchbutton").click();
+    }
+
+    @Test
+    public void canSearchForTags() throws Exception {
+        try (WebClient webClient = new WebClient()) {
+            String title = UUID.randomUUID().toString();
+            String nottitle = UUID.randomUUID().toString();
+            String url = "http://example.com";
+            String tag = UUID.randomUUID().toString();
+
+            HtmlPage page = webClient.getPage("http://localhost:" + port);
+            HtmlPage page2 = addSource(page, title, url);
+            addSource(page, nottitle, url);
+            addTag(page2, tag);
+            page = searchTag(page, tag);
+            Assert.assertTrue(page.asText().contains(title));
+            Assert.assertFalse(page.asText().contains(nottitle));
+        }
+    }
+
 }
