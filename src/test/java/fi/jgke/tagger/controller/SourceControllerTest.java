@@ -19,12 +19,16 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSelect;
-import fi.jgke.tagger.config.TestuserConfiguration;
+import fi.jgke.tagger.domain.Person;
+import fi.jgke.tagger.repository.PersonRepository;
 import java.io.IOException;
 import java.util.UUID;
+import javax.annotation.PostConstruct;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -38,6 +42,23 @@ public class SourceControllerTest {
     @LocalServerPort
     private Integer port;
 
+    @Autowired
+    PersonRepository personRepository;
+
+    public final static String USERNAME = "test_user";
+    public final static String PASSWORD = "test_password";
+
+    @Before
+    public void init() {
+        if (personRepository.findByUsername(USERNAME) != null) {
+            return;
+        }
+        Person person = new Person();
+        person.setUsername(USERNAME);
+        person.setPassword(PASSWORD);
+        personRepository.save(person);
+    }
+
     @Test
     public void indexWorks() throws Exception {
         try (WebClient webClient = new WebClient()) {
@@ -48,8 +69,8 @@ public class SourceControllerTest {
 
     private HtmlPage login(HtmlPage page) throws IOException {
         HtmlForm form = page.getFormByName("loginform");
-        form.getInputByName("username").setValueAttribute(TestuserConfiguration.USERNAME);
-        form.getInputByName("password").setValueAttribute(TestuserConfiguration.PASSWORD);
+        form.getInputByName("username").setValueAttribute(USERNAME);
+        form.getInputByName("password").setValueAttribute(PASSWORD);
         return form.getInputByName("loginbutton").click();
     }
 
