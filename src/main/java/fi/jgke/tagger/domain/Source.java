@@ -23,6 +23,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import org.springframework.data.jpa.domain.AbstractPersistable;
@@ -40,6 +41,9 @@ public class Source extends AbstractPersistable<Long> {
     private String title;
     @Column(name = "url")
     private String url;
+    @ManyToOne
+    @JoinColumn(name = "person")
+    private Person person;
 
     @OneToOne
     @JoinColumn(name = "sourcetype")
@@ -95,5 +99,13 @@ public class Source extends AbstractPersistable<Long> {
         List<Tag> tags = this.getTags();
         tags.add(tag);
         this.setTags(tags);
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
     }
 }

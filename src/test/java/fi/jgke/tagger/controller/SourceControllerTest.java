@@ -19,6 +19,7 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSelect;
+import fi.jgke.tagger.config.TestuserConfiguration;
 import java.io.IOException;
 import java.util.UUID;
 import org.junit.Assert;
@@ -26,10 +27,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("testing")
 public class SourceControllerTest {
 
     @LocalServerPort
@@ -41,6 +44,19 @@ public class SourceControllerTest {
             HtmlPage page = webClient.getPage("http://localhost:" + port);
             Assert.assertEquals("Tagger", page.getTitleText());
         }
+    }
+
+    private HtmlPage login(HtmlPage page) throws IOException {
+        HtmlForm form = page.getFormByName("loginform");
+        form.getInputByName("username").setValueAttribute(TestuserConfiguration.USERNAME);
+        form.getInputByName("password").setValueAttribute(TestuserConfiguration.PASSWORD);
+        return form.getInputByName("loginbutton").click();
+    }
+
+    private HtmlPage authenticatedIndex(WebClient webClient) throws IOException {
+        HtmlPage page = webClient.getPage("http://localhost:" + port + "/login");
+        page = login(page);
+        return page;
     }
 
     private HtmlPage addSource(HtmlPage page, String title, String url) throws IOException {
@@ -62,7 +78,7 @@ public class SourceControllerTest {
             String title = UUID.randomUUID().toString();
             String url = "http://example.com";
 
-            HtmlPage page = webClient.getPage("http://localhost:" + port);
+            HtmlPage page = authenticatedIndex(webClient);
             page = addSource(page, title, url);
 
             Assert.assertTrue(page.asText().contains(title));
@@ -86,7 +102,7 @@ public class SourceControllerTest {
             String url = "http://example.com";
             String tag = UUID.randomUUID().toString();
 
-            HtmlPage page = webClient.getPage("http://localhost:" + port);
+            HtmlPage page = authenticatedIndex(webClient);
             page = addSource(page, title, url);
             page = addTag(page, tag);
 
@@ -110,7 +126,7 @@ public class SourceControllerTest {
             String url = "http://example.com";
             String tag = UUID.randomUUID().toString();
 
-            HtmlPage page = webClient.getPage("http://localhost:" + port);
+            HtmlPage page = authenticatedIndex(webClient);
             HtmlPage page2 = addSource(page, title, url);
             addSource(page, nottitle, url);
             addTag(page2, tag);
