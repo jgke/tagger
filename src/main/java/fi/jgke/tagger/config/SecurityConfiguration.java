@@ -1,4 +1,4 @@
- package fi.jgke.tagger.config;
+package fi.jgke.tagger.config;
 
 import fi.jgke.tagger.auth.JpaAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +17,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/login", "/signup", "/static*/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/", "/register", "/sources/**", "/tags/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/register", "/tagsearch").permitAll()
+                .antMatchers("/login", "/register", "/search", "/static*/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/", "/sources/**", "/tags/**").permitAll()
                 .anyRequest().authenticated();
 
         http.formLogin()
