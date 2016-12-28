@@ -15,11 +15,18 @@
  */
 package fi.jgke.tagger.controller;
 
+import fi.jgke.tagger.domain.Source;
 import fi.jgke.tagger.repository.SourceRepository;
 import fi.jgke.tagger.domain.Tag;
-import fi.jgke.tagger.exception.TagNotFoundException;
 import fi.jgke.tagger.repository.TagRepository;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,9 +45,29 @@ public class TagSearchController {
 
     @RequestMapping
     public String getSource(Model model, @RequestParam String tagstring) {
-        Tag tag = tagRepository.findByValueOrThrow(tagstring);
-        model.addAttribute("tag", tag.getValue());
-        model.addAttribute("sources", tag.getSources());
+        List<String> strings = Arrays.asList(tagstring.split(" "));
+        Stream<String> tagstrings = strings.stream()
+                .filter((t) -> !t.startsWith("!"));
+        Stream<String> nottagstrings = strings.stream()
+                .filter((t) -> t.startsWith("!"))
+                .map((t) -> t.substring(1));
+        Set<Tag> tags = tagstrings
+                .map((t) -> tagRepository.findByValue(t))
+                .filter((t) -> t != null)
+                .collect(Collectors.toSet());
+        Set<Tag> nottags = nottagstrings
+                .map((t) -> tagRepository.findByValue(t))
+                .filter((t) -> t != null)
+                .collect(Collectors.toSet());
+        Set<Source> filtered_sources = tags.stream()
+                .map((t) -> t.getSources())
+                .flatMap(Collection::stream)
+                .filter((s) -> s.getTags().stream()
+                        .allMatch((t) -> !nottags.contains(t)))
+                .filter((s) -> s.getTags().containsAll(tags))
+                .collect(Collectors.toSet());
+        model.addAttribute("tags", strings);
+        model.addAttribute("sources", new ArrayList<>(filtered_sources));
         return "tagsearch";
     }
 

@@ -7,7 +7,8 @@
     <body>
         <header th:replace="fragments/header :: header"></header>
 
-        <h1 th:text="${tag}"></h1>
+        <h1>Search</h1>
+        Tags: <p th:text="${tags}"/>
 
         <ul>
             <li th:each="source: ${sources}">
