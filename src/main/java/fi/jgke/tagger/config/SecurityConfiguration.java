@@ -18,8 +18,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/login", "/signup", "/static*/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/", "/sources/**", "/tags/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/persons").permitAll()
+                .antMatchers(HttpMethod.GET, "/", "/register", "/sources/**", "/tags/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/register", "/tagsearch").permitAll()
                 .anyRequest().authenticated();
 
         http.formLogin()
