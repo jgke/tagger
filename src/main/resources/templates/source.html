@@ -20,12 +20,13 @@
                     <div th:switch="${type}">
                         <!-- does inlining stuff here cause security vulnerabilities (eg. XSS)? -->
                         <div th:case="'image'"><img class="img-responsive" th:src="${source.url}" th:alt="${source.title}"/></div>
-                        <div th:case="'html'">Link</div>
                         <div th:case="'video'"><video th:src="${source.url}" autoplay="autoplay" preload="auto" loop="loop" controls="controls" /></div>
                         <div th:case="'sound'">Sound</div>
                     </div>
                 </div>
                 <div class="col-xs-6 col-sm-3">
+                    <a th:href="${source.url}">Link</a>
+
                     Tags:
                     <ul>
                         <li th:each="tag: ${source.tags}"><span th:text="${tag.value}">tag</span></li>
@@ -36,7 +37,6 @@
                     </form>
                 </div>
             </div>
-            <a th:href="${source.url}">Link</a>
             <br/>
 
             <ul>
