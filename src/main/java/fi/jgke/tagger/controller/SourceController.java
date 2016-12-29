@@ -15,13 +15,16 @@
  */
 package fi.jgke.tagger.controller;
 
+import fi.jgke.tagger.domain.Comment;
 import fi.jgke.tagger.repository.SourceRepository;
 import fi.jgke.tagger.domain.Source;
 import fi.jgke.tagger.domain.Tag;
 import fi.jgke.tagger.domain.Type;
 import fi.jgke.tagger.exception.InvalidSourceUrlException;
+import fi.jgke.tagger.repository.CommentRepository;
 import fi.jgke.tagger.repository.TagRepository;
 import fi.jgke.tagger.repository.TypeRepository;
+import fi.jgke.tagger.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,6 +46,12 @@ public class SourceController {
 
     @Autowired
     TagRepository tagRepository;
+
+    @Autowired
+    CommentRepository commentRepository;
+
+    @Autowired
+    PersonService personService;
 
     @RequestMapping
     public String handleDefault(Model model) {
@@ -72,6 +81,8 @@ public class SourceController {
         source.setTitle(title);
         source.setUrl(url);
         source.setSourcetype(type);
+        source.setPerson(personService.getAuthenticatedPerson());
+
         source = sourceRepository.save(source);
         return "redirect:/sources/" + source.getId();
     }
@@ -85,8 +96,21 @@ public class SourceController {
         return "redirect:/sources/" + source.getId();
     }
 
+    @RequestMapping(value = "/{id}/comments", method = RequestMethod.POST)
+    public String addComment(@PathVariable Long id, @RequestParam String body) {
+        Source source = sourceRepository.findOne(id);
+        Comment comment = new Comment();
+        comment.setComment(body);
+        comment.setPerson(personService.getAuthenticatedPerson());
+        comment.setSource(source);
+        source.addComment(comment);
+        commentRepository.save(comment);
+        sourceRepository.save(source);
+        return "redirect:/sources/" + source.getId();
+    }
+
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public String deleteTag(@PathVariable Long id) {
+    public String deleteComment(@PathVariable Long id) {
         sourceRepository.delete(id);
         return "redirect:/sources";
     }

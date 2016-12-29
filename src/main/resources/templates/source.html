@@ -8,6 +8,10 @@
         <header th:replace="fragments/header :: header"></header>
 
         <h1 th:text="${source.title}"></h1>
+        Submitter: <p th:text="${source.person}" />
+        <form th:action="@{/sources/{id}(id=${source.id})}" name="deleteform" th:method="DELETE">
+            <input type="submit" name="deletebutton" value="Delete source"/>
+        </form>
         <div th:switch="${type}">
             <!-- does inlining stuff here cause security vulnerabilities (eg. XSS)? -->
             <div th:case="'image'"><img th:src="${source.url}" th:alt="${source.title}"/></div>
@@ -25,8 +29,16 @@
             <p>Tag name: <input type="text" name="tagname"/></p>
             <input type="submit" name="addbutton" value="Add!"/>
         </form>
-        <form th:action="@{/sources/{id}(id=${source.id})}" name="deleteform" th:method="DELETE">
-            <input type="submit" name="deletebutton" value="Delete"/>
+
+        <ul>
+            <li th:each="comment: ${source.comments}">
+                <span th:text="${comment.person.username}" /> <br/>
+                <span th:text="${comment.comment}" />
+            </li>
+        </ul>
+        <form th:action="@{/sources/{id}/comments(id=${source.id})}" name="commentform" th:method="POST">
+            <p>Enter comment: <input type="text" name="body"/></p>
+            <input type="submit" name="addbutton" value="Add!"/>
         </form>
     </body>
 </html>

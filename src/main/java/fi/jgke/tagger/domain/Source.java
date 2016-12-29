@@ -20,10 +20,12 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import org.springframework.data.jpa.domain.AbstractPersistable;
@@ -39,8 +41,13 @@ public class Source extends AbstractPersistable<Long> {
 
     @Column(name = "title")
     private String title;
+
     @Column(name = "url")
     private String url;
+
+    @OneToMany(mappedBy = "source", fetch = FetchType.LAZY)
+    private List<Comment> comments;
+
     @ManyToOne
     @JoinColumn(name = "person")
     private Person person;
@@ -107,5 +114,17 @@ public class Source extends AbstractPersistable<Long> {
 
     public void setPerson(Person person) {
         this.person = person;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
     }
 }
