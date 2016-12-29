@@ -3,42 +3,57 @@
     <head>
         <meta charset="UTF-8" />
         <title th:text="${source.title}"></title>
+        <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
     </head>
     <body>
         <header th:replace="fragments/header :: header"></header>
 
-        <h1 th:text="${source.title}"></h1>
-        <p th:text="${'Submitter: ' + source.person.username}" />
-        <form th:action="@{/sources/{id}(id=${source.id})}" name="deleteform" th:method="DELETE">
-            <input type="submit" name="deletebutton" value="Delete source"/>
-        </form>
-        <div th:switch="${type}">
-            <!-- does inlining stuff here cause security vulnerabilities (eg. XSS)? -->
-            <div th:case="'image'"><img th:src="${source.url}" th:alt="${source.title}"/></div>
-            <div th:case="'html'">Link</div>
-            <div th:case="'video'"><video th:src="${source.url}" autoplay="autoplay" preload="auto" loop="loop" controls="controls" /></div>
-            <div th:case="'sound'">Sound</div>
-        </div>
-        <a th:href="${source.url}">Link</a>
-        <br/>
-        Tags:
-        <ul>
-            <li th:each="tag: ${source.tags}"><span th:text="${tag.value}">tag</span></li>
-        </ul>
-        <form th:action="@{/sources/{id}/tags(id=${source.id})}" name="tagform" th:method="POST">
-            <p>Tag name: <input type="text" name="tagname"/></p>
-            <input type="submit" name="addbutton" value="Add!"/>
-        </form>
+        <div class="container">
+            <h1 th:text="${source.title}"></h1>
+            <p th:text="${'Submitter: ' + source.person.username}" />
+            <form th:action="@{/sources/{id}(id=${source.id})}" name="deleteform" th:method="DELETE">
+                <input type="submit" name="deletebutton" value="Delete source"/>
+            </form>
+            <div class="row">
+                <div class="col-xs-12 col-sm-9">
+                    <div th:switch="${type}">
+                        <!-- does inlining stuff here cause security vulnerabilities (eg. XSS)? -->
+                        <div th:case="'image'"><img class="img-responsive" th:src="${source.url}" th:alt="${source.title}"/></div>
+                        <div th:case="'html'">Link</div>
+                        <div th:case="'video'"><video th:src="${source.url}" autoplay="autoplay" preload="auto" loop="loop" controls="controls" /></div>
+                        <div th:case="'sound'">Sound</div>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-3">
+                    Tags:
+                    <ul>
+                        <li th:each="tag: ${source.tags}"><span th:text="${tag.value}">tag</span></li>
+                    </ul>
+                    <form th:action="@{/sources/{id}/tags(id=${source.id})}" name="tagform" th:method="POST">
+                        <p>Tag name: <input type="text" name="tagname"/></p>
+                        <input type="submit" name="addbutton" value="Add!"/>
+                    </form>
+                </div>
+            </div>
+            <a th:href="${source.url}">Link</a>
+            <br/>
 
-        <ul>
-            <li th:each="comment: ${source.comments}">
-                <span th:text="${comment.person.username}" /> <br/>
-                <span th:text="${comment.comment}" />
-            </li>
-        </ul>
-        <form th:action="@{/sources/{id}/comments(id=${source.id})}" name="commentform" th:method="POST">
-            <p>Enter comment: <input type="text" name="body"/></p>
-            <input type="submit" name="addbutton" value="Add!"/>
-        </form>
+            <ul>
+                <li th:each="comment: ${source.comments}">
+                    <span th:text="${comment.person.username}" /> <br/>
+                    <span th:text="${comment.comment}" />
+                </li>
+            </ul>
+            <form class="form-horizontal" th:action="@{/sources/{id}/comments(id=${source.id})}" name="commentform" th:method="POST">
+                <div class="form-group">
+                    <label for="commentfield" class="col-sm-2 control-label">Comment</label>
+                    <textarea class="form-control col-sm-10" rows="3" name="body" id="commentfield"></textarea>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-default">Add comment</button>
+                </div>
+            </form>
+        </div>
     </body>
 </html>
