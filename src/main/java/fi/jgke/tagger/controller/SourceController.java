@@ -33,6 +33,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.apache.commons.validator.routines.UrlValidator;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
+import org.springframework.hateoas.Link;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 @Controller
 @RequestMapping("/sources")
@@ -54,9 +63,18 @@ public class SourceController {
     PersonService personService;
 
     @RequestMapping
-    public String handleDefault(Model model) {
-        model.addAttribute("sources", sourceRepository.findAll());
+    public String handleDefault(Model model, @PageableDefault Pageable pageable) {
+        final PageRequest paged = new PageRequest(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                Direction.DESC, "id"
+        );
+        Page<Source> sources = sourceRepository.findAll(paged);
+        model.addAttribute("sources", sources);
         model.addAttribute("types", typeRepository.findAll());
+        model.addAttribute("next", "page=" + (paged.getPageNumber() + 1) + "&limit=" + paged.getPageSize());
+        model.addAttribute("prev", "page=" + (paged.getPageNumber() - 1) + "&limit=" + paged.getPageSize());
+
         return "sources";
     }
 

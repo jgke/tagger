@@ -10,10 +10,13 @@
         <h1>Latest links</h1>
 
         <ul>
-            <li th:each="source: ${sources}">
+            <li th:each="source: ${sources.getContent()}">
                 <a th:href="@{/sources/{id}(id=${source.id})}" th:text="${source.title}"></a>
             </li>
         </ul>
+
+        <a th:if="${sources.hasPrevious()}" th:href="@{/sources?} + ${prev}" >Newer sources</a>
+        <a th:if="${sources.hasNext()}" th:href="@{/sources?} + ${next}" >Later sources</a>
 
         <form th:action="@{/sources}" th:method="POST" name="addform">
             <p>Title: <input type="text" name="title"/></p>
