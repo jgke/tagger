@@ -8,7 +8,7 @@
         <header th:replace="fragments/header :: header"></header>
 
         <h1 th:text="${source.title}"></h1>
-        Submitter: <p th:text="${source.person}" />
+        <p th:text="${'Submitter: ' + source.person.username}" />
         <form th:action="@{/sources/{id}(id=${source.id})}" name="deleteform" th:method="DELETE">
             <input type="submit" name="deletebutton" value="Delete source"/>
         </form>
