@@ -132,6 +132,7 @@ public class SourceControllerTest {
             String title = UUID.randomUUID().toString();
             String url = "http://example.com";
             String tag = UUID.randomUUID().toString();
+            tag = tag.substring(0, 32);
 
             HtmlPage page = authenticatedIndex(webClient);
             page = addSource(page, title, url);
@@ -156,6 +157,7 @@ public class SourceControllerTest {
             String nottitle = UUID.randomUUID().toString();
             String url = "http://example.com";
             String tag = UUID.randomUUID().toString();
+            tag = tag.substring(0, 32);
 
             HtmlPage page = authenticatedIndex(webClient);
             HtmlPage page2 = addSource(page, title, url);

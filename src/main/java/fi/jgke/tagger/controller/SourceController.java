@@ -105,7 +105,14 @@ public class SourceController {
     }
 
     @RequestMapping(value = "/{id}/tags", method = RequestMethod.POST)
-    public String addTag(@PathVariable Long id, @RequestParam String tagname) {
+    public String addTag(Model model, @PathVariable Long id,
+            @RequestParam String tagname) {
+        tagname = tagname.trim().toLowerCase();
+        if (tagname.length() > 32 || !tagname.matches("^[a-z0-9_-]+$")) {
+            model.addAttribute("tagError", true);
+            return getSource(model, id);
+        }
+
         Source source = sourceRepository.findOneOrThrow(id);
         Tag tag = tagRepository.findByValueOrCreateNew(tagname);
         source.addTag(tag);

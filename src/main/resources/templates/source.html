@@ -65,20 +65,30 @@
                             </ul>
                         </div>
                     </div>
-                    <form class="form-horizontal" th:action="@{/sources/{id}/tags(id=${source.id})}" name="tagform" th:method="POST">
-                        <div class="form-group">
-                            <label for="tagfield" class="col-sm-12">Add a new tag</label>
-                            <div class="col-sm-12">
-                                <input class="form-control" type="text" name="tagname"
-                                       placeholder="tag_name"/>
-                            </div>
+
+                    <div class="col-sm-12">
+                        <div class="alert alert-danger" role="alert" th:if="${tagError}">
+                            Tags must only contain characters a-z, 0-9, _ and -.
+                            Tags can be at most 32 characters long.
                         </div>
-                        <div class="form-group">
-                            <div class="col-sm-12">
-                                <input class="btn btn-default" type="submit" name="addbutton" value="Add!"/>
+                    </div>
+
+                    <div class="col-sm-12">
+                        <form class="form-horizontal" th:action="@{/sources/{id}/tags(id=${source.id})}" name="tagform" th:method="POST">
+                            <div class="form-group">
+                                <label for="tagfield" class="col-sm-12">Add a new tag</label>
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" name="tagname"
+                                           placeholder="tag_name"/>
+                                </div>
                             </div>
-                        </div>
-                    </form>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input class="btn btn-default" type="submit" name="addbutton" value="Add!"/>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
             <br/>
