@@ -16,12 +16,10 @@
 package fi.jgke.tagger.controller;
 
 import fi.jgke.tagger.domain.Comment;
-import fi.jgke.tagger.domain.Person;
 import fi.jgke.tagger.repository.SourceRepository;
 import fi.jgke.tagger.domain.Source;
 import fi.jgke.tagger.domain.Tag;
 import fi.jgke.tagger.domain.Type;
-import fi.jgke.tagger.exception.InvalidSourceUrlException;
 import fi.jgke.tagger.exception.NotAuthorizedToDeleteSourceException;
 import fi.jgke.tagger.repository.CommentRepository;
 import fi.jgke.tagger.repository.TagRepository;
@@ -38,14 +36,8 @@ import org.apache.commons.validator.routines.UrlValidator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.data.web.SortDefault;
-import org.springframework.hateoas.Link;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import org.springframework.security.core.context.SecurityContextHolder;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 @Controller
 @RequestMapping("/sources")
@@ -117,6 +109,15 @@ public class SourceController {
         Source source = sourceRepository.findOneOrThrow(id);
         Tag tag = tagRepository.findByValueOrCreateNew(tagname);
         source.addTag(tag);
+        sourceRepository.save(source);
+        return "redirect:/sources/" + source.getId();
+    }
+
+    @RequestMapping(value = "/{id}/tags/{tagid}", method = RequestMethod.DELETE)
+    public String deleteTag(@PathVariable Long id, @PathVariable Long tagid) {
+        Source source = sourceRepository.findOneOrThrow(id);
+        Tag tag = tagRepository.findOne(tagid);
+        source.removeTag(tag);
         sourceRepository.save(source);
         return "redirect:/sources/" + source.getId();
     }

@@ -17,7 +17,9 @@ package fi.jgke.tagger.domain;
 
 import fi.jgke.tagger.exception.TagAlreadyExistsException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -65,13 +67,11 @@ public class SourceTest {
 
     @Test
     public void testSetGetTags() throws NoSuchMethodException {
-        List<Tag> tags = new ArrayList<>();
+        Set<Tag> tags = new HashSet<>();
         for (int i = 0; i < 3; i++) {
             Tag tag = new Tag();
             tag.setValue(UUID.randomUUID().toString());
-            if (!tags.contains(tag)) {
-                tags.add(tag);
-            }
+            tags.add(tag);
         }
         Source instance = new Source();
         instance.setTags(tags);
@@ -86,7 +86,7 @@ public class SourceTest {
         assertTrue(instance.getTags().contains(tag));
     }
 
-    @Test(expected=TagAlreadyExistsException.class)
+    @Test(expected = TagAlreadyExistsException.class)
     public void testAddDuplicateTagThrows() {
         Source instance = new Source();
         Tag tag = new Tag("foo");

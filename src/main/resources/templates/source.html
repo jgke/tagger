@@ -46,10 +46,25 @@
                     </div>
 
                     <div class="col-sm-12">
-                        <p>Tags:</p>
-                        <ul>
-                            <li th:each="tag: ${source.tags}"><span th:text="${tag.value}">tag</span></li>
-                        </ul>
+                        <div class="row">
+                            <p>Tags:</p>
+                            <ul>
+                                <li class="list-unstyled" th:each="tag: ${source.tags}">
+
+                                    <div class="col-xs-6">
+                                        <span th:text="${tag.value}">tag</span>
+                                    </div>
+
+                                    <div class="col-xs-6">
+                                        <form class="form-inline" th:action="@{/sources/{id}/tags/{tag}(id=${source.id},tag=${tag.id})}"
+                                              name="deletetagform" th:method="DELETE">
+                                            <button class="close" type="submit" name="deletetagbutton" >&#10060;</button>
+                                        </form>
+                                    </div>
+
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                     <form class="form-horizontal" th:action="@{/sources/{id}/tags(id=${source.id})}" name="tagform" th:method="POST">
                         <div class="form-group">

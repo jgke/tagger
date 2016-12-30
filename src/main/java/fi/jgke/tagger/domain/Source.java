@@ -16,8 +16,9 @@
 package fi.jgke.tagger.domain;
 
 import fi.jgke.tagger.exception.TagAlreadyExistsException;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -61,10 +62,10 @@ public class Source extends AbstractPersistable<Long> {
             name = "tags_sources",
             joinColumns = @JoinColumn(name = "source", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "tag", referencedColumnName = "id"))
-    List<Tag> tags;
+    Set<Tag> tags;
 
     public Source() {
-        this.tags = new ArrayList<>();
+        this.tags = new HashSet<>();
     }
 
     public String getTitle() {
@@ -91,19 +92,19 @@ public class Source extends AbstractPersistable<Long> {
         this.sourcetype = sourcetype;
     }
 
-    public List<Tag> getTags() {
+    public Set<Tag> getTags() {
         return tags;
     }
 
-    public void setTags(List<Tag> tags) {
+    public void setTags(Set<Tag> tags) {
         this.tags = tags;
     }
 
     public void addTag(Tag tag) throws TagAlreadyExistsException {
-        if (this.tags.contains(tag)) {
+        Set<Tag> tags = this.getTags();
+        if (tags.contains(tag)) {
             throw new TagAlreadyExistsException();
         }
-        List<Tag> tags = this.getTags();
         tags.add(tag);
         this.setTags(tags);
     }
@@ -126,5 +127,9 @@ public class Source extends AbstractPersistable<Long> {
 
     public void addComment(Comment comment) {
         this.comments.add(comment);
+    }
+
+    public void removeTag(Tag tag) {
+        this.tags.remove(tag);
     }
 }
