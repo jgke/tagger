@@ -43,6 +43,7 @@ Commit & push (the commit will go through Travis to Heroku)
 Todo features:
 --------------
 
+- [ ] Error messages from registering with duplicate data
 - [ ] Better UI for tags, the current one is slightly buggy with longer tags
 - [ ] Better tests, currently the system runs on some unit tests and system tests
 - [ ] Thumbnailing the search page
