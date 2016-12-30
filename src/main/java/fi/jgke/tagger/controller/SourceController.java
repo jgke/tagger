@@ -115,6 +115,12 @@ public class SourceController {
 
         Source source = sourceRepository.findOneOrThrow(id);
         Tag tag = tagRepository.findByValueOrCreateNew(tagname);
+
+        if (source.getTags().contains(tag)) {
+            model.addAttribute("duplicateTagError", true);
+            return getSource(model, id);
+        }
+
         source.addTag(tag);
         sourceRepository.save(source);
         return "redirect:/sources/" + source.getId();

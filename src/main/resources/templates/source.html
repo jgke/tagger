@@ -74,6 +74,12 @@
                     </div>
 
                     <div class="col-sm-12">
+                        <div class="alert alert-danger" role="alert" th:if="${duplicateTagError}">
+                            This link already contains that tag.
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12">
                         <form class="form-horizontal" th:action="@{/sources/{id}/tags(id=${source.id})}" name="tagform" th:method="POST">
                             <div class="form-group">
                                 <label for="tagfield" class="col-sm-12">Add a new tag</label>
