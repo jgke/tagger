@@ -93,11 +93,12 @@ public class SourceController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String addSource(@RequestParam String title, @RequestParam String url,
-            @RequestParam Long sourcetype) {
+    public String addSource(Model model, @RequestParam String title,
+            @RequestParam String url, @RequestParam Long sourcetype) {
 
         if (!isValidUrl(url)) {
-            throw new InvalidSourceUrlException();
+            model.addAttribute("error", "Invalid url format.");
+            return handleDefault(model, new PageRequest(0, 10));
         }
 
         Type type = typeRepository.findOne(sourcetype);
@@ -136,8 +137,9 @@ public class SourceController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public String deleteSource(@PathVariable Long id) {
         Source source = sourceRepository.findOneOrThrow(id);
-        if(!personService.canCurrentUserModifySource(source))
+        if (!personService.canCurrentUserModifySource(source)) {
             throw new NotAuthorizedToDeleteSourceException();
+        }
         sourceRepository.delete(id);
         return "redirect:/sources";
     }
