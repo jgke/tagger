@@ -25,21 +25,20 @@ Feature overview:
 
 Setting up:
 -----------
-1. Create a postgres database (you need postgresql up and running)
+Create a postgres database (you need postgresql up and running)
 ```shell
 psql -c "create database tagger;"
 ```
-2. Run the software
+Run the software
 ```shell
 export JDBC_DATABACE_URL=jdbc:postgresql:tagger
 mvn spring-boot:run
 ```
-3. Do changes
-4. Test them
+Do changes and test them
 ```shell
 mvn test
 ```
-5. Commit & push (the commit will go through Travis to Heroku)
+Commit & push (the commit will go through Travis to Heroku)
 
 Todo features:
 --------------
@@ -54,3 +53,4 @@ Todo features:
 - [ ] Tag searching on database level, current implementation is Java-based
 - [ ] Attach user information to tags, leading to...
 - [ ] List users based on links, tags, comments and ratings
+- [ ] Suggested tags based on existing tags (If tagged with 'cat', suggest 'cute')
