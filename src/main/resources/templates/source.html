@@ -14,8 +14,12 @@
                 <div class="col-xs-12 col-sm-8">
                     <div th:switch="${type}">
                         <!-- does inlining stuff here cause security vulnerabilities (eg. XSS)? -->
-                        <div th:case="'image'"><img class="img-responsive" th:src="${source.url}" th:alt="${source.title}"/></div>
-                        <div th:case="'video'"><video th:src="${source.url}" autoplay="autoplay" preload="auto" loop="loop" controls="controls" /></div>
+                        <div th:case="'image'">
+                            <img class="img-responsive" th:src="${source.url}" th:alt="${source.title}"/>
+                        </div>
+                        <div th:case="'video'" class="embed-responsive embed-responsive-16by9">
+                            <video class="embed-responsive-item" th:src="${source.url}" autoplay="autoplay" preload="auto" loop="loop" controls="controls" />
+                        </div>
                         <div th:case="'sound'">Sound</div>
                     </div>
                 </div>
