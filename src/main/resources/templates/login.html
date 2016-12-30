@@ -11,6 +11,12 @@
 
         <div class="container">
             <div class="row">
+
+                <div class="alert alert-danger" role="alert" th:if="${loginError}">
+                        Wrong username or password.
+                        <a th:href="@{/register}">Not registered?</a>
+                </div>
+
                 <form class="form-horizontal" th:action="@{/authenticate}" name="loginform" th:method="POST">
                     <div class="form-group col-sm-12">
                         <label for="usernamefield" class="col-sm-3 control-label">Username</label>
@@ -32,7 +38,6 @@
                         </div>
                     </div>
                 </form>
-                <a th:href="@{/register}">Register</a>
             </div>
         </div>
         <script th:src="@{/js/jquery.min.js}" />
