@@ -3,18 +3,23 @@
     <head>
         <meta charset="UTF-8" />
         <title>Tagger</title>
+        <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
     </head>
     <body>
         <header th:replace="fragments/header :: header"></header>
 
-        <h1>Search</h1>
-        Tags: <p th:text="${tags}"/>
+        <div class="container">
+            <h1>Search results</h1>
 
-        <ul>
-            <li th:each="source: ${sources}">
-                <a th:href="@{/sources/{id}(id=${source.id})}" th:text="${source.title}"></a>
-            </li>
-        </ul>
+            <ul>
+                <li th:each="source: ${sources}">
+                    <a th:href="@{/sources/{id}(id=${source.id})}" th:text="${source.title}"></a>
+                </li>
+            </ul>
+        </div>
 
+        <script th:src="@{/js/jquery.min.js}" />
+        <script th:src="@{/js/bootstrap.min.js}" />
     </body>
 </html>

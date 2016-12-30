@@ -66,7 +66,7 @@ public class TagSearchController {
                         .allMatch((t) -> !nottags.contains(t)))
                 .filter((s) -> s.getTags().containsAll(tags))
                 .collect(Collectors.toSet());
-        model.addAttribute("tags", strings);
+        model.addAttribute("searchquery", tagstring);
         model.addAttribute("sources", new ArrayList<>(filtered_sources));
         return "tagsearch";
     }
