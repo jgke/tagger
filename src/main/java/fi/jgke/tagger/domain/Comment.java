@@ -40,6 +40,15 @@ public class Comment extends AbstractPersistable<Long> {
     @JoinColumn(name = "source")
     private Source source;
 
+    public Comment() {
+    }
+
+    public Comment(String body, Person person, Source source) {
+        this.comment = body;
+        this.person = person;
+        this.source = source;
+    }
+
     public String getComment() {
         return comment;
     }

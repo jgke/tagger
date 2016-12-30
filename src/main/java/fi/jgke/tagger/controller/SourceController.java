@@ -149,10 +149,8 @@ public class SourceController {
     @RequestMapping(value = "/{id}/comments", method = RequestMethod.POST)
     public String addComment(@PathVariable Long id, @RequestParam String body) {
         Source source = sourceRepository.findOneOrThrow(id);
-        Comment comment = new Comment();
-        comment.setComment(body);
-        comment.setPerson(personService.getAuthenticatedPerson());
-        comment.setSource(source);
+        Comment comment = new Comment(body, personService.getAuthenticatedPerson(),
+                source);
         source.addComment(comment);
         commentRepository.save(comment);
         sourceRepository.save(source);
