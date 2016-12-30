@@ -76,7 +76,7 @@ public class AuthenticationControllerTest {
         form.getInputByName("url").setValueAttribute(url);
         HtmlSelect sourcetypeSelect = form.getSelectByName("sourcetype");
         sourcetypeSelect.setSelectedAttribute(sourcetypeSelect.getOptions().stream()
-                .filter((t) -> t.asText().equals("html"))
+                .filter((t) -> t.asText().equals("link"))
                 .findAny().get(), true);
 
         return form.getInputByName("addbutton").click();
