@@ -64,20 +64,9 @@
                     </form>
                 </div>
             </div>
-
-            <form class="form-horizontal" th:action="@{/search}" th:method="POST" name="tagsearchform">
-                <div class="form-group">
-                    <label for="searchfield" class="col-sm-2 control-label">Tag</label>
-                    <div class="col-sm-10">
-                        <input class="form-control" id="searchfield" type="text" name="tagstring" placeholder="cat !dog"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
-                        <input class="btn btn-default" type="submit" id="" value="Search!" name="searchbutton"/>
-                    </div>
-                </div>
-            </form>
         </div>
+
+        <script th:src="@{/js/jquery.min.js}" />
+        <script th:src="@{/js/bootstrap.min.js}" />
     </body>
 </html>

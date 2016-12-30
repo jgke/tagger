@@ -19,6 +19,7 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSelect;
+import com.gargoylesoftware.htmlunit.javascript.host.event.Event;
 import fi.jgke.tagger.domain.Person;
 import fi.jgke.tagger.repository.PersonRepository;
 import java.io.IOException;
@@ -136,7 +137,7 @@ public class SourceControllerTest {
     private HtmlPage searchTag(HtmlPage page, String tag) throws IOException {
         HtmlForm form = page.getFormByName("tagsearchform");
         form.getInputByName("tagstring").setValueAttribute(tag);
-        return form.getInputByName("searchbutton").click();
+        return form.getButtonByName("searchbutton").click();
     }
 
     @Test
