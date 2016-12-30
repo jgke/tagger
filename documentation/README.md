@@ -52,6 +52,13 @@ Todo features
 - [ ] Profile pages, including list of submitted links, password changes...
 - [ ] Caching, the app is pretty fast right now but it won't scale hard...
 - [ ] Database indices, same as above.
+- [ ] Social media features
+  - [ ] Friends
+  - [ ] Friend requests
+  - [ ] Sharing
+     - [ ] Inside the site
+     - [ ] Sharing to eg. FB, Twitter
+  - [ ] Comments on profile pages
 - [ ] Tag searching on database level, current implementation is Java-based
 - [ ] Attach user information to tags, leading to...
 - [ ] List users based on links, tags, comments and ratings
