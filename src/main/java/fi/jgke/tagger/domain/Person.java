@@ -32,6 +32,8 @@ public class Person extends AbstractPersistable<Long> {
     private String username;
     private String password;
     private String salt;
+    @Column(name = "isadmin")
+    private boolean admin;
 
     @OneToMany(mappedBy = "person", fetch = FetchType.LAZY)
     private List<Source> sources;
@@ -67,5 +69,13 @@ public class Person extends AbstractPersistable<Long> {
 
     public void setSources(List<Source> sources) {
         this.sources = sources;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 }
