@@ -59,12 +59,18 @@ public class SourceController {
     PersonService personService;
 
     @RequestMapping
-    public String handleDefault(Model model, @PageableDefault Pageable pageable) {
+    public String handleDefault(Model model, @PageableDefault Pageable pageable,
+            @RequestParam(required = false) String badurl) {
         final PageRequest paged = new PageRequest(
                 pageable.getPageNumber(),
                 pageable.getPageSize(),
                 Direction.DESC, "id"
         );
+
+        if (badurl != null) {
+            model.addAttribute("error", "Invalid url format.");
+        }
+
         Page<Source> sources = sourceRepository.findAll(paged);
         model.addAttribute("sources", sources);
         model.addAttribute("types", typeRepository.findAll());
@@ -94,12 +100,11 @@ public class SourceController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String addSource(Model model, @RequestParam String title,
+    public String addSource(@RequestParam String title,
             @RequestParam String url, @RequestParam Long sourcetype) {
 
         if (!isValidUrl(url)) {
-            model.addAttribute("error", "Invalid url format.");
-            return handleDefault(model, new PageRequest(0, 10));
+            return "redirect:/sources?badurl";
         }
 
         Type type = typeRepository.findOne(sourcetype);
@@ -114,8 +119,7 @@ public class SourceController {
     }
 
     @RequestMapping(value = "/{id}/tags", method = RequestMethod.POST)
-    public String addTag(@PathVariable Long id,
-            @RequestParam String tagname) {
+    public String addTag(@PathVariable Long id, @RequestParam String tagname) {
         tagname = tagname.trim().toLowerCase();
         if (tagname.length() > 32 || !tagname.matches("^[a-z0-9_-]+$")) {
             return "redirect:/sources/" + id + "/?badtag";
