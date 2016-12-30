@@ -5,14 +5,5 @@
 
 An image tagging service backend. The app is running at [Heroku](http://tagger.jgke.fi).
 
-## Running
-
-```
-JDBC_DATABASE_URL=jdbc:postgresql://localhost:5432/tagger mvn spring-boot:run
-```
-
-## Testing
-
-```
-JDBC_DATABASE_URL=jdbc:postgresql://localhost:5432/tagger mvn test
-```
+## Running / testing
+See documentation/.
