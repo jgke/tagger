@@ -72,7 +72,7 @@ public class SourceControllerTest {
         HtmlForm form = page.getFormByName("loginform");
         form.getInputByName("username").setValueAttribute(USERNAME);
         form.getInputByName("password").setValueAttribute(PASSWORD);
-        return form.getInputByName("loginbutton").click();
+        return form.getButtonByName("loginbutton").click();
     }
 
     private HtmlPage authenticatedIndex(WebClient webClient) throws IOException {
