@@ -43,6 +43,22 @@ public class TagSearchController {
     @Autowired
     TagRepository tagRepository;
 
+    private Set<Tag> getTagsFromList(Stream<String> tags) {
+        return tags
+                .map((t) -> tagRepository.findByValue(t))
+                .filter((t) -> t != null)
+                .collect(Collectors.toSet());
+    }
+
+    private Set<Source> getSourcesFromTags(Set<Tag> tags, Set<Tag> nottags) {
+        return tags.stream()
+                .findAny().get().getSources().stream()
+                .filter((s) -> s.getTags().stream()
+                        .allMatch((t) -> !nottags.contains(t)))
+                .filter((s) -> s.getTags().containsAll(tags))
+                .collect(Collectors.toSet());
+    }
+
     @RequestMapping
     public String getSource(Model model, @RequestParam String tagstring) {
         List<String> strings = Arrays.asList(tagstring.split(" "));
@@ -51,21 +67,11 @@ public class TagSearchController {
         Stream<String> nottagstrings = strings.stream()
                 .filter((t) -> t.startsWith("!"))
                 .map((t) -> t.substring(1));
-        Set<Tag> tags = tagstrings
-                .map((t) -> tagRepository.findByValue(t))
-                .filter((t) -> t != null)
-                .collect(Collectors.toSet());
-        Set<Tag> nottags = nottagstrings
-                .map((t) -> tagRepository.findByValue(t))
-                .filter((t) -> t != null)
-                .collect(Collectors.toSet());
-        Set<Source> filtered_sources = tags.stream()
-                .map((t) -> t.getSources())
-                .flatMap(Collection::stream)
-                .filter((s) -> s.getTags().stream()
-                        .allMatch((t) -> !nottags.contains(t)))
-                .filter((s) -> s.getTags().containsAll(tags))
-                .collect(Collectors.toSet());
+
+        Set<Tag> tags = getTagsFromList(tagstrings);
+        Set<Tag> nottags = getTagsFromList(nottagstrings);
+        Set<Source> filtered_sources = getSourcesFromTags(tags, nottags);
+
         model.addAttribute("searchquery", tagstring);
         model.addAttribute("sources", new ArrayList<>(filtered_sources));
         return "tagsearch";
