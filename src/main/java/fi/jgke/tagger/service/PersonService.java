@@ -16,6 +16,7 @@
 package fi.jgke.tagger.service;
 
 import fi.jgke.tagger.domain.Person;
+import fi.jgke.tagger.domain.Source;
 import fi.jgke.tagger.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -31,5 +32,17 @@ public class PersonService {
     public Person getAuthenticatedPerson() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return personRepository.findByUsername(authentication.getName());
+    }
+
+    public boolean canCurrentUserModifySource(Source source) {
+        boolean authenticated = SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
+        Person person = null;
+
+        if (authenticated) {
+            person = getAuthenticatedPerson();
+        }
+
+        return authenticated && person != null
+                && (person.equals(source.getPerson()) || person.isAdmin());
     }
 }

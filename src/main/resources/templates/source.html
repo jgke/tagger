@@ -37,7 +37,7 @@
                                 </form>
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-6" th:if="${modifiable}">
                                 <form class="form-inline" th:action="@{/sources/{id}(id=${source.id})}" name="deleteform" th:method="DELETE">
                                     <input class="form-control btn btn-danger" type="submit" name="deletebutton" value="Delete source"/>
                                 </form>

@@ -16,9 +16,18 @@
 package fi.jgke.tagger.repository;
 
 import fi.jgke.tagger.domain.Source;
+import fi.jgke.tagger.exception.SourceNotFoundException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SourceRepository extends JpaRepository<Source, Long> {
 
     Source findByTitle(String title);
+
+    default Source findOneOrThrow(Long id) {
+        Source source = this.findOne(id);
+        if (source == null) {
+            throw new SourceNotFoundException();
+        }
+        return source;
+    }
 }

@@ -16,11 +16,13 @@
 package fi.jgke.tagger.controller;
 
 import fi.jgke.tagger.domain.Comment;
+import fi.jgke.tagger.domain.Person;
 import fi.jgke.tagger.repository.SourceRepository;
 import fi.jgke.tagger.domain.Source;
 import fi.jgke.tagger.domain.Tag;
 import fi.jgke.tagger.domain.Type;
 import fi.jgke.tagger.exception.InvalidSourceUrlException;
+import fi.jgke.tagger.exception.NotAuthorizedToDeleteSourceException;
 import fi.jgke.tagger.repository.CommentRepository;
 import fi.jgke.tagger.repository.TagRepository;
 import fi.jgke.tagger.repository.TypeRepository;
@@ -41,6 +43,8 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.hateoas.Link;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import org.springframework.security.core.context.SecurityContextHolder;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 @Controller
@@ -80,9 +84,11 @@ public class SourceController {
 
     @RequestMapping("/{id}")
     public String getSource(Model model, @PathVariable Long id) {
-        Source source = sourceRepository.findOne(id);
+        Source source = sourceRepository.findOneOrThrow(id);
         model.addAttribute("source", source);
         model.addAttribute("type", source.getSourcetype().getValue());
+        model.addAttribute("modifiable", personService.canCurrentUserModifySource(source));
+
         return "source";
     }
 
@@ -107,7 +113,7 @@ public class SourceController {
 
     @RequestMapping(value = "/{id}/tags", method = RequestMethod.POST)
     public String addTag(@PathVariable Long id, @RequestParam String tagname) {
-        Source source = sourceRepository.findOne(id);
+        Source source = sourceRepository.findOneOrThrow(id);
         Tag tag = tagRepository.findByValueOrCreateNew(tagname);
         source.addTag(tag);
         sourceRepository.save(source);
@@ -116,7 +122,7 @@ public class SourceController {
 
     @RequestMapping(value = "/{id}/comments", method = RequestMethod.POST)
     public String addComment(@PathVariable Long id, @RequestParam String body) {
-        Source source = sourceRepository.findOne(id);
+        Source source = sourceRepository.findOneOrThrow(id);
         Comment comment = new Comment();
         comment.setComment(body);
         comment.setPerson(personService.getAuthenticatedPerson());
@@ -128,7 +134,10 @@ public class SourceController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public String deleteComment(@PathVariable Long id) {
+    public String deleteSource(@PathVariable Long id) {
+        Source source = sourceRepository.findOneOrThrow(id);
+        if(!personService.canCurrentUserModifySource(source))
+            throw new NotAuthorizedToDeleteSourceException();
         sourceRepository.delete(id);
         return "redirect:/sources";
     }
