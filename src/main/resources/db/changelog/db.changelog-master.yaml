@@ -48,3 +48,10 @@ databaseChangeLog:
         - sqlFile:
             path: v7.sql
             relativeToChangelogFile: true
+    - changeSet:
+        id: 8
+        author: jgke
+        changes:
+        - sqlFile:
+            path: v8.sql
+            relativeToChangelogFile: true
