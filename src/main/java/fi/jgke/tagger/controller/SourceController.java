@@ -75,8 +75,17 @@ public class SourceController {
     }
 
     @RequestMapping("/{id}")
-    public String getSource(Model model, @PathVariable Long id) {
+    public String getSource(Model model, @PathVariable Long id,
+            @RequestParam(required = false) String badtag,
+            @RequestParam(required = false) String duplicatetag) {
         Source source = sourceRepository.findOneOrThrow(id);
+        if (badtag != null) {
+            model.addAttribute("tagError", true);
+        }
+        if (duplicatetag != null) {
+            model.addAttribute("duplicateTagError", true);
+        }
+
         model.addAttribute("source", source);
         model.addAttribute("type", source.getSourcetype().getValue());
         model.addAttribute("modifiable", personService.canCurrentUserModifySource(source));
@@ -105,20 +114,18 @@ public class SourceController {
     }
 
     @RequestMapping(value = "/{id}/tags", method = RequestMethod.POST)
-    public String addTag(Model model, @PathVariable Long id,
+    public String addTag(@PathVariable Long id,
             @RequestParam String tagname) {
         tagname = tagname.trim().toLowerCase();
         if (tagname.length() > 32 || !tagname.matches("^[a-z0-9_-]+$")) {
-            model.addAttribute("tagError", true);
-            return getSource(model, id);
+            return "redirect:/sources/" + id + "/?badtag";
         }
 
         Source source = sourceRepository.findOneOrThrow(id);
         Tag tag = tagRepository.findByValueOrCreateNew(tagname);
 
         if (source.getTags().contains(tag)) {
-            model.addAttribute("duplicateTagError", true);
-            return getSource(model, id);
+            return "redirect:/sources/" + id + "/?duplicatetag";
         }
 
         source.addTag(tag);
