@@ -23,8 +23,8 @@ Feature overview:
   - Commits in master go automatically into Travis, and if it passes, to Heroku
   - Liquibase (or rather, raw SQL) is used for database migrations
 
-Setting up:
------------
+Setting up
+----------
 Create a postgres database (you need postgresql up and running)
 ```shell
 psql -c "create database tagger;"
@@ -40,8 +40,8 @@ mvn test
 ```
 Commit & push (the commit will go through Travis to Heroku)
 
-Todo features:
---------------
+Todo features
+-------------
 
 - [x] Error messages from registering with duplicate data
 - [ ] Better UI for tags, the current one is slightly buggy with longer tags
