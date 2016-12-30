@@ -17,6 +17,10 @@
                     <a th:href="@{/register}">Not registered?</a>
                 </div>
 
+                <div class="alert alert-success" role="alert" th:if="${registerSuccess}">
+                    Nice going! You can now log in.
+                </div>
+
                 <form class="form-horizontal" th:action="@{/authenticate}" name="loginform" th:method="POST">
                     <div class="form-group col-sm-12">
                         <label for="usernamefield" class="col-sm-3 control-label">Username</label>

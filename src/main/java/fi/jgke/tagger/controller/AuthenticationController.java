@@ -1,7 +1,6 @@
 package fi.jgke.tagger.controller;
 
 import fi.jgke.tagger.domain.Person;
-import fi.jgke.tagger.exception.UsernameAlreadyExistsException;
 import fi.jgke.tagger.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,31 +16,36 @@ public class AuthenticationController {
     PersonRepository personRepository;
 
     @RequestMapping("/login")
-    public String login() {
-        return "login";
-    }
+    public String login(Model model, @RequestParam(required = false) String error,
+            @RequestParam(required = false) String success) {
+        if (error != null) {
+            model.addAttribute("loginError", true);
+        }
+        if (success != null) {
+            model.addAttribute("registerSuccess", true);
+        }
 
-    @RequestMapping("/loginerror")
-    public String loginerror(Model model) {
-        model.addAttribute("loginError", true);
         return "login";
     }
 
     @RequestMapping("/register")
-    public String register_form() {
+    public String registerForm(Model model, @RequestParam(required = false) String duplicate) {
+        if (duplicate != null) {
+            model.addAttribute("registerDuplicate", true);
+        }
         return "register";
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String register(@RequestParam String username,
+    public String register(Model model, @RequestParam String username,
             @RequestParam String password) throws Exception {
         if (personRepository.findByUsername(username) != null) {
-            throw new UsernameAlreadyExistsException();
+            return "redirect:/register?duplicate";
         }
         Person person = new Person();
         person.setUsername(username);
         person.setPassword(password);
         personRepository.save(person);
-        return "redirect:/";
+        return "redirect:/login?success";
     }
 }
