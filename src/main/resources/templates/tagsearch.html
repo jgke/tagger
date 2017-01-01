@@ -36,7 +36,7 @@
                 <div th:each="source,iter: ${sources}">
                     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-2">
                         <a class="thumbnail-block nounderline" th:href="@{/sources/{id}(id=${source.id})}">
-                            <img class="img-circle center" th:if="${source.thumbnail.length() > 0}"
+                            <img class="center" th:if="${source.thumbnail.length() > 0}"
                                  th:src="@{/thumbnails/{thumbnail}(thumbnail=${source.thumbnail})}"/>
                             <span th:unless="${source.thumbnail.length() > 0}"
                                   class="thumbnail-block fa fa-question-circle-o" aria-hidden="true"></span>
