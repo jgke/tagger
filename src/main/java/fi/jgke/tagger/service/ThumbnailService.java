@@ -17,11 +17,8 @@ package fi.jgke.tagger.service;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.stereotype.Service;
 
@@ -38,8 +35,10 @@ public class ThumbnailService {
                     .outputFormat("jpg")
                     .toFile(uuid + ".jpg");
         } catch (IOException err) {
+            System.out.println("Could not create thumbnail: " + err.getMessage());
             return "";
         }
+        System.out.println("Created thumbnail " + uuid);
         return uuid;
     }
 

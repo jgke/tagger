@@ -50,13 +50,30 @@ public class TagSearchController {
                 .collect(Collectors.toSet());
     }
 
+    private Stream<Source> removeSourcesContainingTags(Stream<Source> sources,
+            Set<Tag> tags) {
+        return sources.filter((s) -> s.getTags().stream()
+                .allMatch((t) -> !tags.contains(t)));
+    }
+
+    private Stream<Source> removeSourcesNotContainingTags(Stream<Source> sources,
+            Set<Tag> tags) {
+            return sources.filter((s) -> s.getTags().containsAll(tags));
+    }
+
+    private Stream<Source> getSourcesFromTags(Set<Tag> tags) {
+        if (tags.isEmpty()) {
+            return sourceRepository.findAll().stream();
+        }
+        return tags.stream().findAny().get().getSources().stream();
+    }
+
     private Set<Source> getSourcesFromTags(Set<Tag> tags, Set<Tag> nottags) {
-        return tags.stream()
-                .findAny().get().getSources().stream()
-                .filter((s) -> s.getTags().stream()
-                        .allMatch((t) -> !nottags.contains(t)))
-                .filter((s) -> s.getTags().containsAll(tags))
-                .collect(Collectors.toSet());
+        Stream<Source> sources;
+        sources = getSourcesFromTags(tags);
+        sources = removeSourcesNotContainingTags(sources, tags);
+        sources = removeSourcesContainingTags(sources, nottags);
+        return sources.collect(Collectors.toSet());
     }
 
     @RequestMapping
