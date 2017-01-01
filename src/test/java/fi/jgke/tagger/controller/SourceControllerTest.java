@@ -147,12 +147,14 @@ public class SourceControllerTest {
     private HtmlPage searchTag(HtmlPage page, String tag) throws IOException {
         HtmlForm form = page.getFormByName("tagsearchform");
         form.getInputByName("tagstring").setValueAttribute(tag);
-        return form.getButtonByName("searchbutton").click();
+        return form.getInputByName("searchbutton").click();
     }
 
     @Test
     public void canSearchForTags() throws Exception {
         try (WebClient webClient = new WebClient()) {
+            // Font Awesome's javascript loader breaks tests...?
+            webClient.getOptions().setJavaScriptEnabled(false);
             String title = UUID.randomUUID().toString();
             String nottitle = UUID.randomUUID().toString();
             String url = "http://example.com";

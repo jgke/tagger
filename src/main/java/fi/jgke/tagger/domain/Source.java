@@ -49,6 +49,9 @@ public class Source extends AbstractPersistable<Long> {
     @OneToMany(mappedBy = "source", fetch = FetchType.LAZY)
     private List<Comment> comments;
 
+    @Column(name = "thumbnail")
+    private String thumbnail;
+
     @ManyToOne
     @JoinColumn(name = "person")
     private Person person;
@@ -131,5 +134,13 @@ public class Source extends AbstractPersistable<Long> {
 
     public void removeTag(Tag tag) {
         this.tags.remove(tag);
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
     }
 }

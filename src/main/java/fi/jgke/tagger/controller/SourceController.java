@@ -25,6 +25,8 @@ import fi.jgke.tagger.repository.CommentRepository;
 import fi.jgke.tagger.repository.TagRepository;
 import fi.jgke.tagger.repository.TypeRepository;
 import fi.jgke.tagger.service.PersonService;
+import fi.jgke.tagger.service.ThumbnailService;
+import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -58,6 +60,9 @@ public class SourceController {
     @Autowired
     PersonService personService;
 
+    @Autowired
+    ThumbnailService thumbnailService;
+
     @RequestMapping
     public String handleDefault(Model model, @PageableDefault Pageable pageable,
             @RequestParam(required = false) String badurl) {
@@ -85,6 +90,11 @@ public class SourceController {
             @RequestParam(required = false) String badtag,
             @RequestParam(required = false) String duplicatetag) {
         Source source = sourceRepository.findOneOrThrow(id);
+        if (source.getSourcetype().getValue().equals("image")
+                && source.getThumbnail() == null) {
+            source.setThumbnail(thumbnailService.createThumbnailForImage(source.getUrl()));
+            source = sourceRepository.save(source);
+        }
         if (badtag != null) {
             model.addAttribute("tagError", true);
         }
@@ -101,7 +111,7 @@ public class SourceController {
 
     @RequestMapping(method = RequestMethod.POST)
     public String addSource(@RequestParam String title,
-            @RequestParam String url, @RequestParam Long sourcetype) {
+            @RequestParam String url, @RequestParam Long sourcetype) throws IOException {
 
         if (!isValidUrl(url)) {
             return "redirect:/sources?badurl";
@@ -113,6 +123,7 @@ public class SourceController {
         source.setUrl(url);
         source.setSourcetype(type);
         source.setPerson(personService.getAuthenticatedPerson());
+        source.setThumbnail(thumbnailService.createThumbnailForImage(url));
 
         source = sourceRepository.save(source);
         return "redirect:/sources/" + source.getId();

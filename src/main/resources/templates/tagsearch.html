@@ -4,6 +4,26 @@
         <meta charset="UTF-8" />
         <title>Tagger</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
+        <script src="https://use.fontawesome.com/4388fbd5af.js"></script>
+
+        <style>
+            .nounderline {
+                text-decoration: none !important;
+            }
+            .thumbnail-block {
+                display: table;
+                width: 128px;
+                height: 128px;
+                margin: 0 auto;
+                text-align: center;
+                font-size: 128px;
+            }
+            img.center {
+                display: block;
+                margin: 0 auto;
+            }
+        </style>
+
         <meta name="viewport" content="width=device-width, initial-scale=1" />
     </head>
     <body>
@@ -12,11 +32,28 @@
         <div class="container">
             <h1>Search results</h1>
 
-            <ul>
-                <li th:each="source: ${sources}">
-                    <a th:href="@{/sources/{id}(id=${source.id})}" th:text="${source.title}"></a>
-                </li>
-            </ul>
+            <div class="row">
+                <div th:each="source,iter: ${sources}">
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-2">
+                        <a class="thumbnail-block nounderline" th:href="@{/sources/{id}(id=${source.id})}">
+                            <img class="img-circle center" th:if="${source.thumbnail.length() > 0}"
+                                 th:src="@{/thumbnails/{thumbnail}(thumbnail=${source.thumbnail})}"/>
+                            <span th:unless="${source.thumbnail.length() > 0}"
+                                  class="thumbnail-block fa fa-question-circle-o" aria-hidden="true"></span>
+                        </a>
+                        <a th:href="@{/sources/{id}(id=${source.id})}">
+                            <h3 class="text-center" th:text="${source.title}">Thumbnail label</h3>
+                        </a>
+                    </div>
+                    <div th:if="${iter.index % 2 == 1}"
+                         class="clearfix visible-sm-block"></div>
+                    <div th:if="${iter.index % 3 == 2}"
+                         class="clearfix visible-md-block"></div>
+                    <div th:if="${iter.index % 3 == 5}"
+                         class="clearfix visible-lg-block"></div>
+                </div>
+            </div>
+
         </div>
         <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
