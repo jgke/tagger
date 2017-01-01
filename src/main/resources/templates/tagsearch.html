@@ -38,18 +38,24 @@
                         <a class="thumbnail-block nounderline" th:href="@{/sources/{id}(id=${source.id})}">
                             <img class="center" th:if="${source.thumbnail}"
                                  th:src="@{/sources/{id}/thumbnail(id=${source.id})}"/>
-                            <span th:unless="${source.thumbnail}"
-                                  class="thumbnail-block fa fa-question-circle-o" aria-hidden="true"></span>
-                        </a>
-                        <a th:href="@{/sources/{id}(id=${source.id})}">
-                            <h3 class="text-center" th:text="${source.title}">Thumbnail label</h3>
+                            <div th:unless="${source.thumbnail}" th:switch="${source.sourcetype.getValue()}">
+                                    <span th:case="'image'"
+                                          class="thumbnail-block fa fa-picture-o" aria-hidden="true"></span>
+                                    <span th:case="'video'"
+                                          class="thumbnail-block fa fa-file-video-o" aria-hidden="true"></span>
+                                    <span th:case="'link'"
+                                          class="thumbnail-block fa fa-external-link" aria-hidden="true"></span>
+                            </div>
+                            <a th:href="@{/sources/{id}(id=${source.id})}">
+                                <h3 class="text-center" th:text="${source.title}">Thumbnail label</h3>
+                            </a>
                         </a>
                     </div>
                     <div th:if="${iter.index % 2 == 1}"
                          class="clearfix visible-sm-block"></div>
                     <div th:if="${iter.index % 3 == 2}"
                          class="clearfix visible-md-block"></div>
-                    <div th:if="${iter.index % 3 == 5}"
+                    <div th:if="${iter.index % 6 == 5}"
                          class="clearfix visible-lg-block"></div>
                 </div>
             </div>
