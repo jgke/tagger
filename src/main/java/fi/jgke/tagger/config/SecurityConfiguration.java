@@ -19,6 +19,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/login", "/register", "/search").permitAll()
                 .antMatchers(HttpMethod.GET, "/", "/sources/**", "/tags/**", "/thumbnails/*").permitAll()
+                .antMatchers("/recreateallthumbnails").hasAuthority("ADMIN")
                 .anyRequest().authenticated();
 
         http.formLogin()

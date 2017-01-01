@@ -19,6 +19,7 @@ import fi.jgke.tagger.domain.Source;
 import fi.jgke.tagger.repository.SourceRepository;
 import fi.jgke.tagger.domain.Tag;
 import fi.jgke.tagger.repository.TagRepository;
+import fi.jgke.tagger.service.ThumbnailService;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -42,6 +43,9 @@ public class TagSearchController {
 
     @Autowired
     TagRepository tagRepository;
+
+    @Autowired
+    ThumbnailService thumbnailService;
 
     private Set<Tag> getTagsFromList(Stream<String> tags) {
         return tags

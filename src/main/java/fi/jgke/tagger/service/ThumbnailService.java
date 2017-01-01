@@ -15,11 +15,15 @@
  */
 package fi.jgke.tagger.service;
 
+import fi.jgke.tagger.domain.Source;
+import fi.jgke.tagger.repository.SourceRepository;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.UUID;
 import net.coobird.thumbnailator.Thumbnails;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,22 +31,21 @@ public class ThumbnailService {
 
     private static final int THUMBNAIL_SIZE = 128;
 
-    public String createThumbnailForImage(String url) {
-        String uuid = UUID.randomUUID().toString();
+    @Autowired
+    SourceRepository sourceRepository;
+
+    public void createThumbnailForSource(Source source) {
         try {
-            Thumbnails.of(new URL(url))
-                    .size(THUMBNAIL_SIZE, THUMBNAIL_SIZE)
-                    .outputFormat("jpg")
-                    .toFile(uuid + ".jpg");
+            try (ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
+                Thumbnails.of(new URL(source.getUrl()))
+                        .size(THUMBNAIL_SIZE, THUMBNAIL_SIZE)
+                        .outputFormat("jpg")
+                        .toOutputStream(bos);
+                source.setThumbnail(bos.toByteArray());
+            }
         } catch (IOException err) {
             System.out.println("Could not create thumbnail: " + err.getMessage());
-            return "";
+            source.setThumbnail(null);
         }
-        System.out.println("Created thumbnail " + uuid);
-        return uuid;
-    }
-
-    public File getThumbnail(String uuid) {
-        return new File(uuid + ".jpg");
     }
 }

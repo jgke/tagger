@@ -26,6 +26,7 @@ import fi.jgke.tagger.repository.TagRepository;
 import fi.jgke.tagger.repository.TypeRepository;
 import fi.jgke.tagger.service.PersonService;
 import fi.jgke.tagger.service.ThumbnailService;
+import java.io.File;
 import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,11 +36,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.apache.commons.validator.routines.UrlValidator;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/sources")
@@ -90,11 +93,6 @@ public class SourceController {
             @RequestParam(required = false) String badtag,
             @RequestParam(required = false) String duplicatetag) {
         Source source = sourceRepository.findOneOrThrow(id);
-        if (source.getSourcetype().getValue().equals("image")
-                && source.getThumbnail() == null) {
-            source.setThumbnail(thumbnailService.createThumbnailForImage(source.getUrl()));
-            source = sourceRepository.save(source);
-        }
         if (badtag != null) {
             model.addAttribute("tagError", true);
         }
@@ -123,7 +121,7 @@ public class SourceController {
         source.setUrl(url);
         source.setSourcetype(type);
         source.setPerson(personService.getAuthenticatedPerson());
-        source.setThumbnail(thumbnailService.createThumbnailForImage(url));
+        thumbnailService.createThumbnailForSource(source);
 
         source = sourceRepository.save(source);
         return "redirect:/sources/" + source.getId();
@@ -176,6 +174,13 @@ public class SourceController {
         }
         sourceRepository.delete(id);
         return "redirect:/sources";
+    }
+
+    @RequestMapping("/{id}/thumbnail")
+    @ResponseBody
+    public byte[] getThumbnail(@PathVariable Long id) {
+        Source source = sourceRepository.findOneOrThrow(id);
+        return source.getThumbnail();
     }
 
     private boolean isValidUrl(String url) {
