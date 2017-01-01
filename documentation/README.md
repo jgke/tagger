@@ -47,6 +47,7 @@ Todo features
 - [ ] Better UI for tags, the current one is slightly buggy with longer tags
 - [ ] Better tests, currently the system runs on some unit tests and system tests
 - [ ] Move responsibilities from controllers to something under .service
+- [ ] Paginating search results
 - [ ] Thumbnailing the search page
 - [ ] Link ratings, in the thumbs up/down style
 - [ ] Profile pages, including list of submitted links, password changes...
