@@ -147,7 +147,7 @@ public class SourceControllerTest {
     private HtmlPage searchTag(HtmlPage page, String tag) throws IOException {
         HtmlForm form = page.getFormByName("tagsearchform");
         form.getInputByName("tagstring").setValueAttribute(tag);
-        return form.getInputByName("searchbutton").click();
+        return page.getElementById("searchbutton").click();
     }
 
     @Test

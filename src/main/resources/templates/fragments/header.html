@@ -27,7 +27,7 @@
                         <div class="form-group">
                             <input type="text" class="form-control" name="tagstring" placeholder="cat !dog" th:value="${searchquery}"/>
                         </div>
-                        <input type="submit" class="btn btn-default" name="searchbutton" value="Search!" />
+                        <input type="submit" class="btn btn-default" id="searchbutton" value="Search!" />
                     </form>
 
                     <div sec:authorize="isAnonymous()">
