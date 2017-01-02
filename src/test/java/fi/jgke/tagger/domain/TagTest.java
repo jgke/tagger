@@ -47,4 +47,19 @@ public class TagTest {
         assertEquals(value, instance.getValue());
     }
 
+    @Test
+    public void testEquals() {
+        String value = UUID.randomUUID().toString();
+        Tag instance = new Tag();
+        instance.setValue(value);
+        assertTrue(instance.equals(instance));
+        assertFalse(instance.equals(null));
+        assertFalse(instance.equals(this));
+        Tag other = new Tag();
+        other.setValue(UUID.randomUUID().toString());
+        assertFalse(instance.equals(other));
+        other.setValue(value);
+        assertTrue(instance.equals(other));
+    }
+
 }
