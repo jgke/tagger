@@ -13,8 +13,11 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package fi.jgke.tagger.domain;
+package fi.jgke.tagger.unit.domain;
 
+import fi.jgke.tagger.domain.Comment;
+import fi.jgke.tagger.domain.Person;
+import fi.jgke.tagger.domain.Source;
 import java.util.UUID;
 import org.junit.Assert;
 import org.junit.Test;

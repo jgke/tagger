@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package fi.jgke.tagger.controller;
+package fi.jgke.tagger.integration.controller;
 
 import javax.transaction.Transactional;
 import org.junit.Before;

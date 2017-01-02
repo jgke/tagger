@@ -13,8 +13,12 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package fi.jgke.tagger.domain;
+package fi.jgke.tagger.unit.domain;
 
+import fi.jgke.tagger.domain.Comment;
+import fi.jgke.tagger.domain.Source;
+import fi.jgke.tagger.domain.Tag;
+import fi.jgke.tagger.domain.Type;
 import fi.jgke.tagger.exception.TagAlreadyExistsException;
 import java.util.ArrayList;
 import java.util.HashSet;

@@ -13,20 +13,21 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package fi.jgke.tagger.domain;
+package fi.jgke.tagger.unit.domain;
 
+import fi.jgke.tagger.domain.Health;
 import java.util.UUID;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class TypeTest {
+public class HealthTest {
 
     @Test
-    public void testSetGetValue() {
-        String value = UUID.randomUUID().toString();
-        Tag instance = new Tag();
-        instance.setValue(value);
-        assertEquals(value, instance.getValue());
+    public void testGetVersion() {
+        String version = UUID.randomUUID().toString();
+        Health instance = new Health(version, true);
+        assertEquals(version, instance.getVersion());
+        assertTrue(instance.isHealthy());
     }
 
 }
