@@ -66,7 +66,30 @@ public class SourceTest {
     }
 
     @Test
-    public void testSetGetTags() throws NoSuchMethodException {
+    public void testSetGetComments() {
+        List<Comment> comments = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            Comment comment = new Comment();
+            comment.setComment(UUID.randomUUID().toString());
+            comments.add(comment);
+        }
+        Source instance = new Source();
+        instance.setComments(comments);
+        assertEquals(comments, instance.getComments());
+    }
+
+    @Test
+    public void testAddComment() {
+        Comment comment = new Comment();
+        comment.setComment(UUID.randomUUID().toString());
+        Source instance = new Source();
+        instance.setComments(new ArrayList<>());
+        instance.addComment(comment);
+        assertTrue(instance.getComments().get(0).equals(comment));
+    }
+
+    @Test
+    public void testSetGetTags() {
         Set<Tag> tags = new HashSet<>();
         for (int i = 0; i < 3; i++) {
             Tag tag = new Tag();
@@ -92,5 +115,19 @@ public class SourceTest {
         Tag tag = new Tag("foo");
         instance.addTag(tag);
         instance.addTag(tag);
+    }
+
+    @Test
+    public void testRemoveTag() {
+        Source instance = new Source();
+        Tag tag = new Tag("foo");
+        Tag tag2 = new Tag("bar");
+        instance.addTag(tag);
+        instance.addTag(tag2);
+        assertTrue(instance.getTags().contains(tag));
+        assertTrue(instance.getTags().contains(tag2));
+        instance.removeTag(tag);
+        assertFalse(instance.getTags().contains(tag));
+        assertTrue(instance.getTags().contains(tag2));
     }
 }
