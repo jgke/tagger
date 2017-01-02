@@ -27,7 +27,8 @@
                         <div>
                             <h3>
                                 <span th:text="${source.title}" th:remove="tag" /> <br />
-                                <small th:text="${'Submitter: ' + source.person.username}" />
+                                <small th:if="${source.person}" th:text="${'Submitter: ' + source.person.username}" />
+                                <small th:unless="${source.person}">Submitter: [deleted]</small>
                             </h3>
 
                             <div class="col-md-6">

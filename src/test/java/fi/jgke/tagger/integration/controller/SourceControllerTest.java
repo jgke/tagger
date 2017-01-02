@@ -58,15 +58,8 @@ public class SourceControllerTest {
         Person person = new Person();
         person.setUsername(USERNAME);
         person.setPassword(PASSWORD);
-        /* work around a hibernate-postgres problem */
-        try {
-            personRepository.save(person);
-        } catch (DataIntegrityViolationException e) {
-        }
-        try {
-            personRepository.save(person);
-        } catch (DataIntegrityViolationException e) {
-        }
+
+        personRepository.save(person);
     }
 
     @Test
