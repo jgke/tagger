@@ -29,6 +29,13 @@ public class PersonService {
     @Autowired
     private PersonRepository personRepository;
 
+    public Person registerPerson(String username, String password) {
+        Person person = new Person();
+        person.setUsername(username);
+        person.setPassword(password);
+        return personRepository.save(person);
+    }
+
     public Person getAuthenticatedPerson() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return personRepository.findByUsername(authentication.getName());
