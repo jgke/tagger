@@ -104,12 +104,10 @@ public class Source extends AbstractPersistable<Long> {
     }
 
     public void addTag(Tag tag) throws TagAlreadyExistsException {
-        Set<Tag> tags = this.getTags();
         if (tags.contains(tag)) {
             throw new TagAlreadyExistsException();
         }
         tags.add(tag);
-        this.setTags(tags);
     }
 
     public Person getPerson() {
