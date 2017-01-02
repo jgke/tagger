@@ -16,6 +16,7 @@
 package fi.jgke.tagger.unit.domain;
 
 import fi.jgke.tagger.domain.Comment;
+import fi.jgke.tagger.domain.Person;
 import fi.jgke.tagger.domain.Source;
 import fi.jgke.tagger.domain.Tag;
 import fi.jgke.tagger.domain.Type;
@@ -90,6 +91,23 @@ public class SourceTest {
         instance.setComments(new ArrayList<>());
         instance.addComment(comment);
         assertTrue(instance.getComments().get(0).equals(comment));
+    }
+
+    @Test
+    public void testSetGetPerson() {
+        Person person = new Person();
+        person.setUsername(UUID.randomUUID().toString());
+        Source instance = new Source();
+        instance.setPerson(person);
+        assertEquals(person, instance.getPerson());
+    }
+
+    @Test
+    public void testSetGetThumbnail() {
+        byte[] data = UUID.randomUUID().toString().getBytes();
+        Source instance = new Source();
+        instance.setThumbnail(data);
+        assertArrayEquals(data, instance.getThumbnail());
     }
 
     @Test
