@@ -38,6 +38,13 @@ Do changes and test them
 ```shell
 mvn test
 ```
+Check out test coverage
+```shell
+mvn test
+mvn org.pitest:pitest-maven:mutationCoverage
+mvn site
+xdg-open target/site/index.html
+```
 Commit & push (the commit will go through Travis to Heroku)
 
 Todo features
