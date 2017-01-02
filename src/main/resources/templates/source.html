@@ -11,7 +11,7 @@
 
         <div class="container">
             <div class="row">
-                <div class="col-xs-12 col-sm-8">
+                <div class="col-xs-12 col-sm-7">
                     <div th:switch="${type}">
                         <!-- does inlining stuff here cause security vulnerabilities (eg. XSS)? -->
                         <div th:case="'image'">
@@ -22,7 +22,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xs-6 col-sm-4">
+                <div class="col-xs-12 col-sm-5">
                     <div class="well col-sm-12">
                         <div>
                             <h3>
@@ -47,8 +47,8 @@
                     <div class="col-sm-12">
                         <div class="row">
                             <p>Tags:</p>
-                            <ul>
-                                <li class="list-unstyled" th:each="tag: ${source.tags}">
+                            <ul class="list-unstyled">
+                                <li th:each="tag: ${source.tags}">
 
                                     <div class="col-xs-6">
                                         <span th:text="${tag.value}">tag</span>
