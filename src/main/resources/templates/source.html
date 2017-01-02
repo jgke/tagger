@@ -51,7 +51,7 @@
                                 <li th:each="tag: ${source.tags}">
 
                                     <div class="col-xs-6">
-                                        <span th:text="${tag.value}">tag</span>
+                                        <a th:href="@{/search?tagstring={tag}(tag=${tag.value})}" th:text="${tag.value}" />
                                     </div>
 
                                     <div class="col-xs-6">
@@ -66,15 +66,15 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-12">
-                        <div class="alert alert-danger" role="alert" th:if="${tagError}">
+                    <div class="col-sm-12" th:if="${tagError}">
+                        <div class="alert alert-danger" role="alert">
                             Tags must only contain characters a-z, 0-9, _ and -.
                             Tags can be at most 32 characters long.
                         </div>
                     </div>
 
-                    <div class="col-sm-12">
-                        <div class="alert alert-danger" role="alert" th:if="${duplicateTagError}">
+                    <div class="col-sm-12" th:if="${duplicateTagError}">
+                        <div class="alert alert-danger" role="alert">
                             This link already contains that tag.
                         </div>
                     </div>
