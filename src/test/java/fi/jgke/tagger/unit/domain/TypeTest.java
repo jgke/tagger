@@ -15,7 +15,7 @@
  */
 package fi.jgke.tagger.unit.domain;
 
-import fi.jgke.tagger.domain.Tag;
+import fi.jgke.tagger.domain.Type;
 import java.util.UUID;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -25,9 +25,8 @@ public class TypeTest {
     @Test
     public void testSetGetValue() {
         String value = UUID.randomUUID().toString();
-        Tag instance = new Tag();
+        Type instance = new Type();
         instance.setValue(value);
         assertEquals(value, instance.getValue());
     }
-
 }
