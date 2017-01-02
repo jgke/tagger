@@ -16,7 +16,11 @@
                 height: 128px;
                 margin: 0 auto;
                 text-align: center;
-                font-size: 128px;
+                font-size: 80px;
+            }
+            .thumbnail-block span {
+                display: table-cell;
+                vertical-align: middle;
             }
             img.center {
                 display: block;
@@ -34,23 +38,25 @@
 
             <div class="row">
                 <div th:each="source,iter: ${sources}">
-                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-2">
+                    <div class="col-xs-6 col-sm-6 col-md-4 col-lg-2">
                         <a class="thumbnail-block nounderline" th:href="@{/sources/{id}(id=${source.id})}">
                             <img class="center" th:if="${source.thumbnail}"
                                  th:src="@{/sources/{id}/thumbnail(id=${source.id})}"/>
                             <div th:unless="${source.thumbnail}" th:switch="${source.sourcetype.getValue()}">
-                                    <span th:case="'image'"
-                                          class="thumbnail-block fa fa-picture-o" aria-hidden="true"></span>
-                                    <span th:case="'video'"
-                                          class="thumbnail-block fa fa-file-video-o" aria-hidden="true"></span>
-                                    <span th:case="'link'"
-                                          class="thumbnail-block fa fa-external-link" aria-hidden="true"></span>
+                                <span th:case="'image'"
+                                      class="thumbnail-block fa fa-picture-o" aria-hidden="true"></span>
+                                <span th:case="'video'"
+                                      class="thumbnail-block fa fa-file-video-o" aria-hidden="true"></span>
+                                <span th:case="'link'"
+                                      class="thumbnail-block fa fa-external-link" aria-hidden="true"></span>
                             </div>
                             <a th:href="@{/sources/{id}(id=${source.id})}">
                                 <h3 class="text-center" th:text="${source.title}">Thumbnail label</h3>
                             </a>
                         </a>
                     </div>
+                    <div th:if="${iter.index % 2 == 1}"
+                         class="clearfix visible-xs-block"></div>
                     <div th:if="${iter.index % 2 == 1}"
                          class="clearfix visible-sm-block"></div>
                     <div th:if="${iter.index % 3 == 2}"
