@@ -19,7 +19,6 @@ import fi.jgke.tagger.repository.SourceRepository;
 import fi.jgke.tagger.service.ThumbnailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -32,12 +31,12 @@ public class DefaultController {
     ThumbnailService thumbnailService;
 
     @RequestMapping("/")
-    public String handleDefault(Model model) {
+    public String handleDefault() {
         return "redirect:/sources";
     }
 
     @RequestMapping("/recreateallthumbnails")
-    public String recreateallthumbnails() {
+    public String recreateAllThumbnails() {
         sourceRepository
                 .findAll()
                 .forEach((t) -> {
