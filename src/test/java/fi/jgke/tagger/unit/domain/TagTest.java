@@ -64,4 +64,10 @@ public class TagTest {
         assertTrue(instance.equals(other));
     }
 
+    @Test
+    public void testHashcode() {
+        String value = "test_tag";
+        Tag instance = new Tag(value);
+        assertEquals(-1146446698, instance.hashCode());
+    }
 }
