@@ -12,3 +12,5 @@ deploy:
   app: powerful-fortress-97395
   on:
     repo: jgke/tagger
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
