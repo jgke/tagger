@@ -64,9 +64,9 @@ Todo features
   - [ ] Friends
   - [ ] Friend requests
   - [ ] Sharing
-     - [ ] Inside the site
+     - [ ] Inside the site
      - [ ] Sharing to eg. FB, Twitter
-  - [ ] Comments on profile pages
+  - [ ] Comments on profile pages
 - [ ] Tag searching on database level, current implementation is Java-based
 - [ ] Attach user information to tags, leading to...
 - [ ] List users based on links, tags, comments and ratings
