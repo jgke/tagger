@@ -22,6 +22,7 @@ import fi.jgke.tagger.domain.Tag;
 import fi.jgke.tagger.exception.NotAuthorizedToDeleteSourceException;
 import fi.jgke.tagger.repository.CommentRepository;
 import fi.jgke.tagger.repository.TagRepository;
+import fi.jgke.tagger.service.CommentService;
 import fi.jgke.tagger.service.PersonService;
 
 import fi.jgke.tagger.service.TagService;
@@ -52,6 +53,9 @@ public class SourceController {
 
     @Autowired
     TagService tagService;
+
+    @Autowired
+    CommentService commentService;
 
     @RequestMapping(method = RequestMethod.GET)
     public String getSource(Model model, @PathVariable Long id,
@@ -113,14 +117,9 @@ public class SourceController {
     @RequestMapping(value = "/comments", method = RequestMethod.POST)
     public String addComment(@PathVariable Long id, @RequestParam String body) {
         Source source = sourceRepository.findOneOrThrow(id);
-        Comment comment = new Comment(body, personService.getAuthenticatedPerson(),
-                source);
-        source.addComment(comment);
-        commentRepository.save(comment);
-        sourceRepository.save(source);
+        commentService.addComment(body, source);
         return "redirect:/sources/" + source.getId();
     }
-
 
     @RequestMapping("/thumbnail")
     @ResponseBody

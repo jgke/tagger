@@ -20,10 +20,12 @@ import fi.jgke.tagger.controller.SourceController;
 import fi.jgke.tagger.domain.Source;
 import fi.jgke.tagger.domain.Tag;
 import fi.jgke.tagger.domain.Type;
+import fi.jgke.tagger.exception.NotAuthorizedToDeleteSourceException;
 import fi.jgke.tagger.repository.PersonRepository;
 import fi.jgke.tagger.repository.SourceRepository;
 import fi.jgke.tagger.repository.TagRepository;
 import fi.jgke.tagger.repository.TypeRepository;
+import fi.jgke.tagger.service.CommentService;
 import fi.jgke.tagger.service.PersonService;
 import fi.jgke.tagger.service.SourceService;
 import fi.jgke.tagger.service.TagService;
@@ -59,6 +61,9 @@ public class SourceControllerTest {
 
     @Mock
     TagService tagService;
+
+    @Mock
+    CommentService commentService;
 
     @Mock
     Model model;
@@ -164,5 +169,60 @@ public class SourceControllerTest {
         when(source.getTags()).thenReturn(tags);
         String result = sourceController.addTag(id, tagname);
         Assert.assertEquals("redirect:/sources/" + id + "?duplicatetag", result);
+    }
+
+    @Test
+    public void deleteSource() throws Exception {
+        Long id = 5L;
+        when(sourceRepository.findOneOrThrow(id)).thenReturn(source);
+        when(personService.canCurrentUserModifySource(source)).thenReturn(true);
+        String result = sourceController.deleteSource(id);
+        Assert.assertEquals("redirect:/sources", result);
+        verify(sourceRepository).delete(id);
+    }
+
+    @Test(expected = NotAuthorizedToDeleteSourceException.class)
+    public void notAuthorizedToDeleteSource() throws Exception {
+        Source source = new Source();
+        Long id = 5L;
+        when(sourceRepository.findOneOrThrow(id)).thenReturn(source);
+        when(personService.canCurrentUserModifySource(source)).thenReturn(false);
+        String result = sourceController.deleteSource(id);
+    }
+
+    @Test
+    public void deleteTag() throws Exception {
+        Tag tag = new Tag();
+        Long id = 5L;
+        Long tagId = 3L;
+        when(source.getId()).thenReturn(id);
+        when(sourceRepository.findOneOrThrow(id)).thenReturn(source);
+        when(tagRepository.findOne(tagId)).thenReturn(tag);
+        String result = sourceController.deleteTag(id, tagId);
+        Assert.assertEquals("redirect:/sources/" + id, result);
+        verify(source).removeTag(tag);
+        verify(sourceRepository).save(source);
+    }
+
+    @Test
+    public void addComment() throws Exception {
+        Tag tag = new Tag();
+        Long id = 5L;
+        String body = "Comment body goes here";
+        when(source.getId()).thenReturn(id);
+        when(sourceRepository.findOneOrThrow(id)).thenReturn(source);
+        String result = sourceController.addComment(id, body);
+        Assert.assertEquals("redirect:/sources/" + id, result);
+        verify(commentService).addComment(body, source);
+    }
+
+    @Test
+    public void getThumbnail() throws Exception {
+        byte[] arr = "foobar".getBytes();
+        Long id = 5L;
+        when(sourceRepository.findOneOrThrow(id)).thenReturn(source);
+        when(source.getThumbnail()).thenReturn(arr);
+        byte[] received = sourceController.getThumbnail(id);
+        Assert.assertArrayEquals(arr, received);
     }
 }
