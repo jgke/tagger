@@ -19,16 +19,10 @@ import fi.jgke.tagger.domain.Comment;
 import fi.jgke.tagger.repository.SourceRepository;
 import fi.jgke.tagger.domain.Source;
 import fi.jgke.tagger.domain.Tag;
-import fi.jgke.tagger.domain.Type;
 import fi.jgke.tagger.exception.NotAuthorizedToDeleteSourceException;
 import fi.jgke.tagger.repository.CommentRepository;
 import fi.jgke.tagger.repository.TagRepository;
-import fi.jgke.tagger.repository.TypeRepository;
 import fi.jgke.tagger.service.PersonService;
-import fi.jgke.tagger.service.ThumbnailService;
-
-import java.io.File;
-import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,13 +31,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.apache.commons.validator.routines.UrlValidator;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -54,9 +41,6 @@ public class SourceController {
     SourceRepository sourceRepository;
 
     @Autowired
-    TypeRepository typeRepository;
-
-    @Autowired
     TagRepository tagRepository;
 
     @Autowired
@@ -64,9 +48,6 @@ public class SourceController {
 
     @Autowired
     PersonService personService;
-
-    @Autowired
-    ThumbnailService thumbnailService;
 
     @RequestMapping(method = RequestMethod.GET)
     public String getSource(Model model, @PathVariable Long id,
@@ -143,11 +124,4 @@ public class SourceController {
         Source source = sourceRepository.findOneOrThrow(id);
         return source.getThumbnail();
     }
-
-    private boolean isValidUrl(String url) {
-        String[] schemes = {"http", "https"};
-        UrlValidator urlValidator = new UrlValidator(schemes);
-        return urlValidator.isValid(url);
-    }
-
 }

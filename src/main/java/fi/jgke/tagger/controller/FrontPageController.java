@@ -20,6 +20,7 @@ import fi.jgke.tagger.domain.Type;
 import fi.jgke.tagger.repository.SourceRepository;
 import fi.jgke.tagger.repository.TypeRepository;
 import fi.jgke.tagger.service.PersonService;
+import fi.jgke.tagger.service.SourceService;
 import fi.jgke.tagger.service.ThumbnailService;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,13 +45,10 @@ public class FrontPageController {
     SourceRepository sourceRepository;
 
     @Autowired
+    SourceService sourceService;
+
+    @Autowired
     TypeRepository typeRepository;
-
-    @Autowired
-    PersonService personService;
-
-    @Autowired
-    ThumbnailService thumbnailService;
 
     @RequestMapping
     public String handleDefault(Model model, @PageableDefault Pageable pageable,
@@ -78,26 +76,12 @@ public class FrontPageController {
     public String addSource(@RequestParam String title,
                             @RequestParam String url, @RequestParam Long sourcetype) throws IOException {
 
-        if (!isValidUrl(url)) {
+        if (!sourceService.isValidUrl(url)) {
             return "redirect:/sources?badurl";
         }
 
         Type type = typeRepository.findOne(sourcetype);
-        Source source = new Source();
-        source.setTitle(title);
-        source.setUrl(url);
-        source.setSourcetype(type);
-        source.setPerson(personService.getAuthenticatedPerson());
-        thumbnailService.createThumbnailForSource(source);
-
-        source = sourceRepository.save(source);
+        Source source = sourceService.createSource(title, url, type);
         return "redirect:/sources/" + source.getId();
     }
-
-    private boolean isValidUrl(String url) {
-        String[] schemes = {"http", "https"};
-        UrlValidator urlValidator = new UrlValidator(schemes);
-        return urlValidator.isValid(url);
-    }
-
 }

@@ -17,10 +17,10 @@ package fi.jgke.tagger.unit.controller;
 
 import fi.jgke.tagger.controller.FrontPageController;
 import fi.jgke.tagger.domain.Source;
+import fi.jgke.tagger.domain.Type;
 import fi.jgke.tagger.repository.SourceRepository;
 import fi.jgke.tagger.repository.TypeRepository;
-import fi.jgke.tagger.service.PersonService;
-import fi.jgke.tagger.service.ThumbnailService;
+import fi.jgke.tagger.service.SourceService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,6 +36,7 @@ import java.util.UUID;
 import static org.mockito.Mockito.*;
 
 public class FrontPageControllerTest {
+
     @InjectMocks
     FrontPageController frontPageController;
 
@@ -43,16 +44,16 @@ public class FrontPageControllerTest {
     SourceRepository sourceRepository;
 
     @Mock
+    SourceService sourceService;
+
+    @Mock
     TypeRepository typeRepository;
 
     @Mock
-    PersonService personService;
-
-    @Mock
-    ThumbnailService thumbnailService;
-
-    @Mock
     Model model;
+
+    @Mock
+    Source source;
 
     @Before
     public void init() throws Exception {
@@ -61,12 +62,16 @@ public class FrontPageControllerTest {
 
     @Test
     public void handleDefault() throws Exception {
-        int page = 0;
+        int page = 1;
         int size = 10;
+        String expected_next = "page=2&limit=10";
+        String expected_prev = "page=0&limit=10";
         Pageable pageable = new PageRequest(page, size);
         String result = frontPageController.handleDefault(model, pageable, null);
         Assert.assertEquals("sources", result);
         verify(model, never()).addAttribute(eq("error"), any(Object.class));
+        verify(model).addAttribute("next", expected_next);
+        verify(model).addAttribute("prev", expected_prev);
     }
 
     @Test
@@ -78,16 +83,25 @@ public class FrontPageControllerTest {
         verify(model).addAttribute(eq("error"), any(String.class));
     }
 
-
     @Test
     public void addSourceWithGoodUrl() throws Exception {
         String title = UUID.randomUUID().toString();
         String url = "http://example.com";
-        Long sourceType = 1L;
+        Long sourceType = 2L;
+        String sourceTypeName = "typename";
+        Type type = new Type();
+        type.setValue(sourceTypeName);
         Long id = 5L;
-        when(sourceRepository.save(any(Source.class))).thenReturn(new Source() {{setId(id);}});
+
+        when(source.getId()).thenReturn(id);
+        when(sourceService.isValidUrl(url)).thenReturn(true);
+        when(typeRepository.findOne(sourceType)).thenReturn(type);
+        when(sourceService.createSource(title, url, type)).thenReturn(source);
+
         String result = frontPageController.addSource(title, url, sourceType);
-        verify(sourceRepository).save(any(Source.class));
+
+        verify(sourceService).createSource(title, url, type);
+
         Assert.assertEquals("redirect:/sources/" + id, result);
     }
 
