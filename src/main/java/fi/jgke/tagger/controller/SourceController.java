@@ -24,6 +24,7 @@ import fi.jgke.tagger.repository.CommentRepository;
 import fi.jgke.tagger.repository.TagRepository;
 import fi.jgke.tagger.service.PersonService;
 
+import fi.jgke.tagger.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -49,6 +50,9 @@ public class SourceController {
     @Autowired
     PersonService personService;
 
+    @Autowired
+    TagService tagService;
+
     @RequestMapping(method = RequestMethod.GET)
     public String getSource(Model model, @PathVariable Long id,
                             @RequestParam(required = false) String badtag,
@@ -71,15 +75,15 @@ public class SourceController {
     @RequestMapping(value = "/tags", method = RequestMethod.POST)
     public String addTag(@PathVariable Long id, @RequestParam String tagname) {
         tagname = tagname.trim().toLowerCase();
-        if (tagname.length() > 32 || !tagname.matches("^[a-z0-9_-]+$")) {
-            return "redirect:/sources/" + id + "/?badtag";
+        if (!tagService.isValidTag(tagname)) {
+            return "redirect:/sources/" + id + "?badtag";
         }
 
         Source source = sourceRepository.findOneOrThrow(id);
         Tag tag = tagRepository.findByValueOrCreateNew(tagname);
 
         if (source.getTags().contains(tag)) {
-            return "redirect:/sources/" + id + "/?duplicatetag";
+            return "redirect:/sources/" + id + "?duplicatetag";
         }
 
         source.addTag(tag);

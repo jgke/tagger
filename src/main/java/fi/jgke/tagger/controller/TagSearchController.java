@@ -15,7 +15,7 @@
  */
 package fi.jgke.tagger.controller;
 
-import fi.jgke.tagger.service.TagSearchService;
+import fi.jgke.tagger.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,12 +27,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class TagSearchController {
 
     @Autowired
-    TagSearchService tagSearchService;
+    TagService tagService;
 
     @RequestMapping
     public String searchSources(Model model, @RequestParam String tagstring) {
         model.addAttribute("searchquery", tagstring);
-        model.addAttribute("sources", tagSearchService.searchSources(tagstring));
+        model.addAttribute("sources", tagService.searchSources(tagstring));
         return "tagsearch";
     }
 

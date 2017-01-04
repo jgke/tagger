@@ -28,7 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TagSearchService {
+public class TagService {
 
     @Autowired
     SourceRepository sourceRepository;
@@ -80,5 +80,13 @@ public class TagSearchService {
         Set<Tag> nottags = getTagsFromList(nottagstrings);
 
         return searchSources(tags, nottags);
+    }
+
+    public boolean isValidTag(String tag) {
+        if (tag.length() > 32)
+            return false;
+        if(!tag.matches("^[a-z0-9_-]+$"))
+            return false;
+        return true;
     }
 }

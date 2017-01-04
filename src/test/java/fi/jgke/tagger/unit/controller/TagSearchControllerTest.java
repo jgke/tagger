@@ -16,7 +16,7 @@
 package fi.jgke.tagger.unit.controller;
 
 import fi.jgke.tagger.controller.TagSearchController;
-import fi.jgke.tagger.service.TagSearchService;
+import fi.jgke.tagger.service.TagService;
 import fi.jgke.tagger.domain.Source;
 import fi.jgke.tagger.repository.TagRepository;
 
@@ -40,7 +40,7 @@ public class TagSearchControllerTest {
     TagSearchController tagSearchController;
 
     @Mock
-    TagSearchService tagSearchService;
+    TagService tagService;
 
     @Mock
     TagRepository tagRepository;
@@ -61,7 +61,7 @@ public class TagSearchControllerTest {
         sources.add(new Source());
         sources.add(new Source());
         String query = "a";
-        Mockito.when(tagSearchService.searchSources(query)).thenReturn(sources);
+        Mockito.when(tagService.searchSources(query)).thenReturn(sources);
         assertEquals("tagsearch", tagSearchController.searchSources(model, query));
         Mockito.verify(model).addAttribute("searchquery", query);
         Mockito.verify(model).addAttribute("sources", sources);
