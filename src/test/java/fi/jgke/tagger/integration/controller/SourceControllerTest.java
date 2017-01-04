@@ -19,12 +19,9 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSelect;
-import com.gargoylesoftware.htmlunit.javascript.host.event.Event;
+import com.gargoylesoftware.htmlunit.html.HtmlTextArea;
 import fi.jgke.tagger.domain.Person;
 import fi.jgke.tagger.repository.PersonRepository;
-import java.io.IOException;
-import java.util.UUID;
-import javax.annotation.PostConstruct;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,9 +29,11 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.io.IOException;
+import java.util.UUID;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -108,7 +107,6 @@ public class SourceControllerTest {
             Assert.assertTrue(page.asText().contains(title));
             Assert.assertTrue(page.asXml().contains(url));
 
-            /* If the test fails before this, the source is left in the database... */
             page.getFormByName("deleteform").getInputByName("deletebutton").click();
         }
     }
@@ -161,7 +159,36 @@ public class SourceControllerTest {
             page = searchTag(page, tag);
             Assert.assertTrue(page.asText().contains(title));
             Assert.assertFalse(page.asText().contains(nottitle));
+            page = page.getAnchorByText(title).click();
+            page.getFormByName("deleteform").getInputByName("deletebutton").click();
         }
     }
 
+    private HtmlPage addComment(HtmlPage page, String comment) throws IOException {
+        HtmlTextArea textInput = (HtmlTextArea) page.getElementById("commentfield");
+        textInput.setText(comment);
+        return page.getElementById("commentbutton").click();
+    }
+
+    @Test
+    public void canAddAComment() throws Exception {
+        try (WebClient webClient = new WebClient()) {
+            String title = UUID.randomUUID().toString();
+            String url = "http://example.com";
+
+            HtmlPage page = authenticatedIndex(webClient);
+            page = addSource(page, title, url);
+
+            Assert.assertTrue(page.asText().contains(title));
+            Assert.assertTrue(page.asXml().contains(url));
+
+            String comment = "This is a comment.";
+            page = addComment(page, comment);
+
+            Assert.assertTrue(page.asText().contains(comment));
+
+            /* If the test fails before this, the source is left in the database... */
+            page.getFormByName("deleteform").getInputByName("deletebutton").click();
+        }
+    }
 }
