@@ -16,7 +16,6 @@
 package fi.jgke.tagger.repository;
 
 import fi.jgke.tagger.domain.Tag;
-import fi.jgke.tagger.exception.TagNotFoundException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TagRepository extends JpaRepository<Tag, Long> {
@@ -27,14 +26,6 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
         Tag tag = this.findByValue(value);
         if (tag == null) {
             tag = this.save(new Tag(value));
-        }
-        return tag;
-    }
-
-    default Tag findByValueOrThrow(String value) {
-        Tag tag = this.findByValue(value);
-        if (tag == null) {
-            throw new TagNotFoundException();
         }
         return tag;
     }
