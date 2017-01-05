@@ -15,6 +15,7 @@
  */
 package fi.jgke.tagger.integration.controller;
 
+import com.gargoylesoftware.htmlunit.TextPage;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -22,6 +23,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlSelect;
 import com.gargoylesoftware.htmlunit.html.HtmlTextArea;
 import fi.jgke.tagger.domain.Person;
 import fi.jgke.tagger.repository.PersonRepository;
+import fi.jgke.tagger.repository.SourceRepository;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -89,14 +91,14 @@ public class SourceControllerTest {
         HtmlSelect sourcetypeSelect = form.getSelectByName("sourcetype");
         sourcetypeSelect.setSelectedAttribute(sourcetypeSelect.getOptions()
                 .stream()
-                .filter((t) -> t.asText().equals("link"))
+                .filter((t) -> t.asText().equals("image"))
                 .findAny().get(), true);
 
         return form.getInputByName("addbutton").click();
     }
 
     @Test
-    public void canAddASource() throws Exception {
+    public void canAddASourceWithBadThumbnail() throws Exception {
         try (WebClient webClient = new WebClient()) {
             String title = UUID.randomUUID().toString();
             String url = "http://example.com";
@@ -106,6 +108,38 @@ public class SourceControllerTest {
 
             Assert.assertTrue(page.asText().contains(title));
             Assert.assertTrue(page.asXml().contains(url));
+
+            String[] split = page.getUrl().getPath().split("/");
+            Long id = Long.parseLong(split[split.length - 1]);
+            String thumbnailUrl = "http://localhost:" + port + "/sources/" + id + "/thumbnail";
+            String thumbnail = ((TextPage) webClient.getPage(thumbnailUrl)).getContent();
+            System.out.println(thumbnailUrl);
+
+            Assert.assertTrue(thumbnail.isEmpty());
+
+            page.getFormByName("deleteform").getInputByName("deletebutton").click();
+        }
+    }
+
+    @Test
+    public void canAddASourceWithGoodThumbnail() throws Exception {
+        try (WebClient webClient = new WebClient()) {
+            String title = UUID.randomUUID().toString();
+            String url = "http://placekitten.com/200/400";
+
+            HtmlPage page = authenticatedIndex(webClient);
+            page = addSource(page, title, url);
+
+            Assert.assertTrue(page.asText().contains(title));
+            Assert.assertTrue(page.asXml().contains(url));
+
+            String[] split = page.getUrl().getPath().split("/");
+            Long id = Long.parseLong(split[split.length - 1]);
+            String thumbnailUrl = "http://localhost:" + port + "/sources/" + id + "/thumbnail";
+            String thumbnail = ((HtmlPage) webClient.getPage(thumbnailUrl)).asText();
+            System.out.println(thumbnailUrl);
+            Assert.assertTrue(!thumbnail.isEmpty());
+
 
             page.getFormByName("deleteform").getInputByName("deletebutton").click();
         }
