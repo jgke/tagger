@@ -15,6 +15,7 @@
  */
 package fi.jgke.tagger.integration.controller;
 
+import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.TextPage;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
@@ -223,6 +224,13 @@ public class SourceControllerTest {
 
             /* If the test fails before this, the source is left in the database... */
             page.getFormByName("deleteform").getInputByName("deletebutton").click();
+        }
+    }
+
+    @Test(expected = FailingHttpStatusCodeException.class)
+    public void getErrorWhenRequestingUnknownSource() throws Exception {
+        try (WebClient webClient = new WebClient()) {
+            webClient.getPage("http://localhost:" + port + "/sources/0/");
         }
     }
 }
