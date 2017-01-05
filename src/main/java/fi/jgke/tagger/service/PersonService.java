@@ -49,7 +49,6 @@ public class PersonService {
             person = getAuthenticatedPerson();
         }
 
-        return authenticated && person != null
-                && (person.equals(source.getPerson()) || person.isAdmin());
+        return authenticated && (person.equals(source.getPerson()) || person.isAdmin());
     }
 }
