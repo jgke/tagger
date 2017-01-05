@@ -31,9 +31,6 @@ public class ThumbnailService {
 
     private static final int THUMBNAIL_SIZE = 128;
 
-    @Autowired
-    SourceRepository sourceRepository;
-
     public void createThumbnailForSource(Source source) {
         try {
             try (ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
