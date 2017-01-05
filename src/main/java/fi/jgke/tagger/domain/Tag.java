@@ -15,6 +15,7 @@
  */
 package fi.jgke.tagger.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
@@ -22,6 +23,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 /**
@@ -44,6 +46,7 @@ public class Tag extends AbstractPersistable<Long> {
 
     public Tag(String value) {
         this.setValue(value);
+        this.sources = new ArrayList<>();
     }
 
     public String getValue() {
@@ -60,6 +63,10 @@ public class Tag extends AbstractPersistable<Long> {
 
     public void setSources(List<Source> sources) {
         this.sources = sources;
+    }
+
+    public void addSource(Source source) {
+        this.sources.add(source);
     }
 
     @Override
