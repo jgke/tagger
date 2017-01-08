@@ -106,7 +106,6 @@ public class PersonServiceTest {
         when(SecurityContextHolder.getContext()).thenReturn(securityContext);
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(authentication.getName()).thenReturn(username);
-        when(authentication.isAuthenticated()).thenReturn(true);
         when(personRepository.findByUsername(username)).thenReturn(person);
         assertTrue(personService.canCurrentUserModifySource(source));
     }
@@ -121,7 +120,7 @@ public class PersonServiceTest {
         Source source = new Source();
         when(SecurityContextHolder.getContext()).thenReturn(securityContext);
         when(securityContext.getAuthentication()).thenReturn(authentication);
-        when(authentication.isAuthenticated()).thenReturn(false);
+        when(authentication.getName()).thenReturn("anonymousUser");
         assertTrue(!personService.canCurrentUserModifySource(source));
     }
 

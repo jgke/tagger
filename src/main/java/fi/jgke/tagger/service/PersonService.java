@@ -42,13 +42,14 @@ public class PersonService {
     }
 
     public boolean canCurrentUserModifySource(Source source) {
-        boolean authenticated = SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
+        boolean authenticated = !SecurityContextHolder.getContext().getAuthentication().getName().equals("anonymousUser");
         Person person = null;
 
-        if (authenticated) {
-            person = getAuthenticatedPerson();
+        if (!authenticated) {
+            return false;
         }
 
-        return authenticated && (person.equals(source.getPerson()) || person.isAdmin());
+        person = getAuthenticatedPerson();
+        return person.equals(source.getPerson()) || person.isAdmin();
     }
 }
